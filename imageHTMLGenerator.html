@@ -1,0 +1,602 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Easy HTML Generator</title>
+    <meta name="description"
+        content="Allows users to input valid HTML, and then edit attributes using an intuatively designed UI.">
+    <meta name="author" content="SitePoint">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/normalize.css">
+
+</head>
+<style>
+    body {
+        --main-bg-color: white;
+        --main-color: dodgerblue;
+        --main-bg-color-lighter: rgba(50, 50, 50);
+        --secondary-color: rgb(89, 119, 30);
+        --vertical-divider-color: gold;
+        --horizontal-divider-color: gold;
+        background: url('pic01.jpg');
+        background-size: cover;
+        font-family: 'Nunito', sans-serif;
+    }
+
+    #container {
+        display: flex;
+        /* margin: 0px auto; */
+        width: 100%;
+
+    }
+
+
+
+    #imageHTMLGenerator_object_input {
+        /* width: 40%; */
+        height: 300px;
+        text-align: start;
+    }
+
+    #nav {
+        width: 100%;
+        /* background: var(--main-bg-color); */
+        color: var(--main-color);
+        padding: 5px 0px;
+        border-bottom: 2px dashed var(--horizontal-divider-color);
+    }
+
+    #nav_title {
+        font-size: 40px;
+        padding: 20px 40px;
+        font-weight: bold;
+        color: var(--main-color);
+    }
+
+    #nav_title_second_half {
+        color: var(--secondary-color);
+        border-left: 1px solid darkgray;
+        padding-left: 10px;
+    }
+
+    #copyToClipboardButton {
+        width: 200px;
+        height: 50px;
+        font-size: 20px;
+        font-weight: bold;
+        color: var(--main-color);
+        background: var(--main-bg-color);
+        /* border: 5px dashed white; */
+        /* margin: 10px; */
+        transition: background 0.5s;
+        transition: color 0.5s;
+        transition: 'border-color'0.5s;
+        transition: cursor 0.1s;
+        /* -webkit-box-shadow: 7px 7px 7px -5px white;
+        box-shadow: 7px 7px 7px -5px white; */
+        border-style: outset;
+        border-top: 4px solid var(--main-bg-color);
+        border-bottom: 4px solid var(--main-bg-color-lighter);
+        border-left: 4px solid var(--main-bg-color);
+        border-right: 4px solid var(--main-bg-color-lighter);
+        border-radius: 4px;
+
+    }
+
+    .button_styles {
+        width: 200px;
+        height: 50px;
+        font-size: 20px;
+        font-weight: bold;
+        color: palevioletred;
+        background: var(--main-bg-color);
+        transition: background 0.5s;
+        transition: color 0.5s;
+        transition: 'border-color'0.5s;
+        transition: cursor 0.1s;
+        border-style: outset;
+        border-top: 4px solid var(--main-bg-color);
+        border-bottom: 4px solid var(--main-bg-color-lighter);
+        border-left: 4px solid var(--main-bg-color);
+        border-right: 4px solid var(--main-bg-color-lighter);
+        border-radius: 4px;
+    }
+
+    .button_styles:hover {
+        cursor: pointer;
+    }
+
+    .button_styles:focus {
+        outline: 0;
+    }
+
+    .button_styles:active {
+        color: yellowgreen;
+        border-color: yellowgreen;
+        border-top: 4px solid var(--main-bg-color-lighter);
+        border-bottom: 4px solid var(--main-bg-color);
+        border-left: 4px solid var(--main-bg-color-lighter);
+        border-right: 4px solid var(--main-bg-color);
+    }
+
+    #copyToClipboardButton:hover {
+        cursor: pointer;
+    }
+
+    #copyToClipboardButton:active {
+        color: yellowgreen;
+        border-color: yellowgreen;
+        border-top: 4px solid var(--main-bg-color-lighter);
+        border-bottom: 4px solid var(--main-bg-color);
+        border-left: 4px solid var(--main-bg-color-lighter);
+        border-right: 4px solid var(--main-bg-color);
+    }
+
+    #copyToClipboardButton:focus {
+        outline: 0;
+    }
+
+
+
+    #generateImageHTML_button:hover {
+        cursor: pointer;
+
+    }
+
+    #left_panel {
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        width: 50%;
+        border-right: 2px dashed var(--vertical-divider-color);
+        z-index: 2;
+        /* background-color: var(--main-bg-color); */
+        color: var(--secondary-color);
+
+
+    }
+
+    #left_panel_instructions {
+        font-size: 20px;
+        padding: 20px;
+        font-weight: bold;
+        background: black;
+        margin-bottom: 10px;
+        border: 2px dashed var(--secondary-color);
+    }
+
+    #user_html_input {
+        width: 80%;
+        margin: 10px;
+        height: 200px;
+    }
+
+    #right_panel {
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 1;
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        align-items: center;
+        /* background-color: var(--main-bg-color); */
+        color: var(--main-color);
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    #right_panel_title {
+        font-size: 25px;
+        font-weight: bold;
+        padding: 20px;
+    }
+
+    #output_html {
+        /* display: flex; */
+        /* flex-direction: column;
+        align-items: center; */
+        padding: 15px;
+        font-size: 16px;
+        z-index: 0;
+    }
+
+
+
+    .inputs_container {
+        display: flex;
+        flex-direction: column;
+        padding: 5px 10px;
+        align-items: flex-start;
+    }
+
+    .inputs_container_title {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .inputs_container_item {
+        padding: 10px 0px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        margin-bottom: 5px;
+    }
+
+    input {
+        width: 200px;
+        padding: 2px;
+        -webkit-box-shadow:
+            inset 0 0 8px rgba(0, 0, 0, 0.1),
+            0 0 16px rgba(0, 0, 0, 0.1);
+        -moz-box-shadow:
+            inset 0 0 8px rgba(0, 0, 0, 0.1),
+            0 0 16px rgba(0, 0, 0, 0.1);
+        box-shadow:
+            inset 0 0 8px rgba(0, 0, 0, 0.1),
+            0 0 16px rgba(0, 0, 0, 0.1);
+        padding: 5px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 5px;
+    }
+
+    #input_fields {
+        margin-left: 10%;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    #next_button {
+        width: 100px;
+        height: 40px;
+        align-self: center;
+    }
+
+    #final_output_html {
+        position: absolute;
+        z-index: -1;
+        top: -1000px;
+    }
+
+    .hide_button {
+        background: transparent;
+        border: none;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .hide_button:hover {
+        color: yellowgreen;
+        cursor: pointer;
+    }
+
+    @media(max-width: 1700px) {
+        #container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #left_panel {
+            width: 100%;
+            border: none;
+        }
+
+        #right_panel {
+            width: 100%;
+            border: none;
+            border-top: 2px dashed var(--vertical-divider-color);
+        }
+
+
+    }
+</style>
+
+<body>
+    <!-- {
+                    div_class: 'col-md-2 col-sm-3 col-xsm-6',
+                    div_style: 'text-align: center; padding: 20px',
+                    a_class: 'woocommerce-main-image zoom',
+                    a[href]: '/wp-content/uploads/2018/08/small-quad.jpg',
+                    a_data-title: 'img title',
+                    a[data-lightbox-gallery]: 'rearliftgal',
+                    img_class: 'attachment-shop-thumb-main size-shop-thumb-main wp-post-image',
+                    img_style: 'border: 2px solid #cfcfcf;',
+                    img_title: 'Walkin' Wheels Full Support/4-Wheel SMALL',
+                    img_src: '/wp-content/uploads/2018/08/small-quad-150x150.jpg',
+                    img_alt: 'Walkin' Wheels Full Support/4-Wheel SMALL',
+                    img_width: '150',
+                    img_height: '150'
+                } -->
+    <div id="nav">
+        <div id='nav_title'>Custom Tabs <span id="nav_title_second_half">Image HTML Generator</span></div>
+    </div>
+    <div id="container">
+        <div id="left_panel">
+
+            <!-- <div id="left_panel_instructions">Welcome to the Custom Tabs Image HTML Generator.
+                Below, please paste some valid HTML you wish to edit. This panel includes a
+                dynamically generated list of all the attributes found in any valid html
+                submitted below. Please alter the attributes using the form below. When you are finished,
+                click 'Copy to Clipboard' to copy the generated HTML.</div>
+
+            <textarea name="" id="user_html_input" cols="30" rows="10"></textarea>
+            <button onclick="validateUserHTMLInput();">Validate</button> -->
+            <!-- <input type=text id="user_html_input"> -->
+
+            <div id="input_fields">
+                <!-- DIV TAG ATTRIBUTES -->
+
+                <div id="div_tag_inputs" class="inputs_container">
+                    <div class="inputs_container_title"> div tag attributes: </div>
+                    <div class="inputs_container_item">
+                        <label for="div_class">div[class]<button class="hide_button"
+                                onclick="hideItem(this);">hide</button></label>
+                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="div_class" name="div_class"
+                            type="text"></input>
+                    </div>
+                    <div class="inputs_container_item">
+                        <label for="div_style">div[style]<button class="hide_button"
+                                onclick="hideItem(this);">hide</button></label>
+                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="div_style" name="div_style"
+                            type="text"></input>
+                    </div>
+
+                </div>
+                <!-- A TAG ATTRIBUTES -->
+
+                <div id="a_tag_inputs" class="inputs_container">
+                    <div class="inputs_container_title"> a tag attributes: </div>
+                    <div class="inputs_container_item">
+                        <label for="a_class">a[class]<button class="hide_button"
+                                onclick="hideItem(this);">hide</button></label>
+                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="a_class" name="a_class"
+                            type="text"></input>
+                    </div>
+                    <div class="inputs_container_item">
+                        <label for="a_href">a[href]<button class="hide_button"
+                                onclick="hideItem(this);">hide</button></label>
+                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="a_href" name="a_href"
+                            type="text"></input>
+                    </div>
+                    <div class="inputs_container_item">
+                        <label for="a_data-title">a[data-title]<button class="hide_button"
+                                onclick="hideItem(this);">hide</button></label>
+                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="a_data-title" name="a_data-title"
+                            type="text"></input>
+                    </div>
+                    <div class="inputs_container_item">
+                        <label for="a_data-lightbox-gallery">a[data-lightbox-gallery]<button class="hide_button"
+                                onclick="hideItem(this);">hide</button></label>
+                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="a_data-lightbox-gallery"
+                            name="a_data-lightbox-gallery" type="text"></input>
+                    </div>
+                </div>
+                <!-- IMG TAG ATTRIBUTES -->
+
+                <div id=img_tag_attributes class="inputs_container">
+
+                    <div class="inputs_container_title"> img tag attributes: </div>
+                    <div class="inputs_container_item">
+                        <label for="img_class">img[class]<button class="hide_button"
+                                onclick="hideItem(this);">hide</button></label>
+                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="img_class" name="img_class"
+                            type="text"></input>
+                    </div>
+                    <div class="inputs_container_item">
+                        <label for="img_style">img[style]<button class="hide_button"
+                                onclick="hideItem(this);">hide</button></label>
+                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="img_style" name="img_style"
+                            type="text"></input>
+                    </div>
+                    <div class="inputs_container_item">
+                        <label for="img_title">img[title]<button class="hide_button"
+                                onclick="hideItem(this);">hide</button></label>
+                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="img_title" name="img_title"
+                            type="text"></input>
+                    </div>
+                    <div class="inputs_container_item">
+                        <label for="img_src">img[src]<button class="hide_button"
+                                onclick="hideItem(this);">hide</button></label>
+                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="img_src" name="img_src"
+                            type="text"></input>
+                    </div>
+                    <div class="inputs_container_item">
+                        <label for="img_alt">img[alt]<button class="hide_button"
+                                onclick="hideItem(this);">hide</button></label>
+                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="img_alt" name="img_alt"
+                            type="text"></input>
+                    </div>
+                    <div class="inputs_container_item">
+                        <label for="img_width">img[width]<button class="hide_button"
+                                onclick="hideItem(this);">hide</button></label>
+                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="img_width" name="img_width"
+                            type="text"></input>
+                    </div>
+                    <div class="inputs_container_item">
+                        <label for="img_height">img[height]<button class="hide_button"
+                                onclick="hideItem(this);">hide</button></label>
+                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="img_height" name="img_height"
+                            type="text"></input>
+                    </div>
+                    <input type=text id="final_output_html"></input>
+                    <!-- <input type=text id="validate_input_html"></input> -->
+                </div>
+
+
+
+                <!-- <button id="copyToClipboardButton" onclick="copyToClipBoard();">Copy To Clipboard</button> -->
+            </div>
+            <button id="next_button" class="button_styles">Next</button>
+        </div>
+        <div id="right_panel">
+            <div id="right_panel_title">Generated HTML Preview</div>
+            <xmp id="output_html">
+
+            </xmp>
+            <button id="copyToClipboardButton" onclick="copyToClipBoard();">Copy To Clipboard</button>
+        </div>
+    </div>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/html-inspector/0.8.2/html-inspector.js"></script>
+    <script>
+        var HTMLbody = document.getElementsByTagName('body');
+        var output_object = {
+            'div_class': 'col-md-2 col-sm-3 col-xsm-6',
+            'div_style': 'text-align: center; padding: 20px',
+            'a_class': 'woocommerce-main-image zoom',
+            'a_href': '/wp-content/uploads/2018/08/small-quad.jpg',
+            'a_data-title': 'img title',
+            'a_data-lightbox-gallery': 'rearliftgal',
+            'img_class': 'attachment-shop-thumb-main size-shop-thumb-main wp-post-image',
+            'img_style': 'border: 2px solid #cfcfcf;',
+            'img_title': 'Walkin\' Wheels Full Support/4-Wheel SMALL',
+            'img_src': '/wp-content/uploads/2018/08/small-quad-150x150.jpg',
+            'img_alt': 'Walkin\' Wheels Full Support/4-Wheel SMALL',
+            'img_width': '150',
+            'img_height': '150'
+        }
+
+        let trimmed = "empty";
+
+        function imageHTMLGenerator(id) {
+
+            output_object[id] = $("#" + id).val();
+            // console.log(output_object[id]);
+
+            let generatedHTML = '<div \n'
+                + 'class="' + output_object['div_class'] + '" '
+                + 'style="' + output_object['div_style'] + '">\n'
+                + '\t<a class="' + output_object['a_class'] + '" \n'
+                + '\thref="' + output_object['a_href'] + '" \n'
+                + '\tdata-title="' + output_object['a_data-title'] + '" \n'
+                + '\tdata-lightbox-gallery=' + output_object['a_data-lightbox-gallery'] + '>\n'
+                + '\t\t<img \n'
+                + '\t\tclass="' + output_object['img_class'] + '" \n'
+                + '\t\tstyle="' + output_object['img_style'] + '" \n'
+                + '\t\ttitle="' + output_object['img_title'] + '" \n'
+                + '\t\tsrc="' + output_object['img_src'] + '" \n'
+                + '\t\talt="' + output_object['img_alt'] + '" \n'
+                + '\t\twidth="' + output_object['img_width'] + '" \n'
+                + '\t\theight="' + output_object['img_height'] + '"/>\n'
+                + '\t</a>\n'
+                + '</div>\n'
+
+
+            // Render to Screen
+            $('#output_html').html(generatedHTML);
+            // Print to Input (where copyToClipboard grabs it from)
+            trimmed = generatedHTML.replace(/\n/g, "").replace(/\t/g, "").replace(/\s+/g, " ").replace(/(\r\n|\n|\r)/gm, " ");
+            $("#final_output_html").val(trimmed);
+
+
+
+        }
+
+        (function printDefaultImageHTML() {
+            let generatedHTML = '<div \n'
+                + 'class="' + output_object['div_class'] + '" '
+                + 'style="' + output_object['div_style'] + '">\n'
+                + '\t<a class="' + output_object['a_class'] + '" \n'
+                + '\thref="' + output_object['a_href'] + '" \n'
+                + '\tdata-title="' + output_object['a_data-title'] + '" \n'
+                + '\tdata-lightbox-gallery=' + output_object['a_data-lightbox-gallery'] + '>\n'
+                + '\t\t<img \n'
+                + '\t\tclass="' + output_object['img_class'] + '" \n'
+                + '\t\tstyle="' + output_object['img_style'] + '" \n'
+                + '\t\ttitle="' + output_object['img_title'] + '" \n'
+                + '\t\tsrc="' + output_object['img_src'] + '" \n'
+                + '\t\talt="' + output_object['img_alt'] + '" \n'
+                + '\t\twidth="' + output_object['img_width'] + '" \n'
+                + '\t\theight="' + output_object['img_height'] + '"/>\n'
+                + '\t</a>\n'
+                + '</div>\n'
+
+            // Render to Screen
+            $('#output_html').html(generatedHTML);
+            // Print to Input (where copyToClipboard grabs it from)
+            let trimmed = generatedHTML.replace(/\n/g, "").replace(/\t/g, "").replace(/\s+/g, " ").replace(/(\r\n|\n|\r)/gm, " ");
+
+            $("#final_output_html").val(trimmed);
+
+
+            $('#input_fields .hide_button').each(function (index, item) {
+                $(item).click();
+            })
+        })();
+
+        function copyToClipBoard() {
+            var copyText = document.getElementById("final_output_html");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999)
+            document.execCommand("copy");
+            // console.log("Copied the text: " + copyText.value);
+        }
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        let combinedImages = '';
+
+
+        $('#next_button').on('click', function () {
+            // Append new html to master string - combinedImages
+            combinedImages = combinedImages + trimmed;
+            // Post a preview of the output in the console
+            console.log('%c ' + combinedImages, 'background: #222; color: ' + getRandomColor());
+            // alert('Image saved! Preview output html in console')
+
+            $("#final_output_html").val(combinedImages);
+
+            // Clear Previous values
+            $('#input_fields input').each(function (index, item) {
+                $(item).val('')
+            })
+        })
+
+        function hideItem(element) {
+            // console.log('Inside hideItem: ', element);
+            if ($(element).parent().next().is(':hidden')) {
+                $(element).parent().next().show();
+                $(element).text('hide');
+                $(element).parent().parent().css("padding", "10px 0px");
+            } else {
+                $(element).parent().next().hide();
+                $(element).text('edit');
+                $(element).parent().parent().css("padding", "0px 0px");
+            }
+
+
+        }
+
+        function validateUserHTMLInput() {
+            setTimeout(() => {
+                $('#validate_input_html').val($('#user_html_input').val());
+            }, 0);
+            console.log('Inside validateUserHTML');
+            HTMLInspector.inspect({
+                domRoot: "#validate_input_html",
+                onComplete: function (errors) {
+                    console.log('Complete')
+                    errors.forEach(function (error) {
+                        // report errors to external service...
+                        console.log(error)
+                    })
+                }
+            })
+        }
+
+
+    </script>
+</body>
+
+</html>
