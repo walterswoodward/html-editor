@@ -401,7 +401,7 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/html-inspector/0.8.2/html-inspector.js"></script>
     <script>
 
-        let trimmed = "empty";
+        let trimmed = "";
 
         function imageHTMLGenerator(element) {
             // console.log('Element:', $(element)[0].id);
@@ -552,7 +552,7 @@
         let nextButtonCount = 0;
         $('#next_button').on('click', function () {
             // Append new html to master string - combinedImages
-            if (trimmed !== "empty") {
+            if (trimmed !== "") {
                 combinedImages = combinedImages + trimmed;
                 // Post a preview of the output in the console
                 console.log('%c ' + combinedImages, 'background: #222; color: ' + getRandomColor());
@@ -567,7 +567,7 @@
 
             let message = nextButtonCount + ' Copies Appended';
 
-            if (trimmed === 'empty') {
+            if (trimmed === '') {
                 $('#warning_message').text(' Warning: EMPTY element found, nothing appended');
                 setTimeout(() => {
                     $('#warning_message').text('');
@@ -581,7 +581,7 @@
             $('#input_fields input').each(function (index, item) {
                 $(item).val('')
             })
-            if (trimmed !== 'empty') {
+            if (trimmed !== '') {
                 // Increment Next Button Count
                 nextButtonCount++
             }
