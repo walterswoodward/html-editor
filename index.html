@@ -47,7 +47,7 @@
         /* background: var(--main-bg-color); */
         color: var(--main-color);
         padding: 5px 0px;
-        border-bottom: 2px dashed var(--horizontal-divider-color);
+        /* border-bottom: 2px dashed var(--horizontal-divider-color); */
     }
 
     #nav_title {
@@ -110,6 +110,11 @@
         cursor: pointer;
     }
 
+    button:focus,
+    textarea:focus {
+        outline: 0;
+    }
+
     .button_styles:focus {
         outline: 0;
     }
@@ -152,7 +157,7 @@
         flex-direction: column;
         /* align-items: center; */
         width: 50%;
-        border-right: 2px dashed var(--vertical-divider-color);
+        /* border-right: 2px dashed var(--vertical-divider-color); */
         z-index: 2;
         /* background-color: var(--main-bg-color); */
         color: var(--secondary-color);
@@ -164,15 +169,17 @@
         font-size: 20px;
         padding: 20px;
         font-weight: bold;
-        background: black;
+        /* background: black; */
         margin-bottom: 10px;
-        border: 2px dashed var(--secondary-color);
+        /* border: 2px dashed var(--secondary-color); */
     }
 
     #user_html_input {
-        width: 80%;
-        margin: 10px;
-        height: 200px;
+        display: flex;
+        margin: 0px 3% 10px 3%;
+        width: 90%;
+        height: 100px;
+        padding: 2%;
     }
 
     #right_panel {
@@ -204,6 +211,12 @@
         z-index: 0;
     }
 
+    #input_fields {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
 
 
     .inputs_container {
@@ -211,17 +224,30 @@
         flex-direction: column;
         padding: 5px 10px;
         align-items: flex-start;
+        font-weight: bold;
+        font-size: 18px;
+        color: var(--main-color);
     }
 
     .inputs_container_title {
         font-size: 20px;
-        font-weight: bold;
+        font-weight: normal;
     }
 
-    .inputs_container_item {
+    /* .inputs_container_item {
         padding: 10px 0px;
+        font-size: 14px;
         display: flex;
         flex-direction: column;
+        font-weight: normal;
+    } */
+
+    .input_item_label {
+        display: flex;
+        flex-direction: column;
+        font-size: 14px;
+        color: var(--secondary-color);
+        font-weight: normal;
     }
 
     label {
@@ -245,16 +271,26 @@
         border-radius: 5px;
     }
 
-    #input_fields {
-        margin-left: 10%;
+
+
+    #next_button_container {
         display: flex;
-        flex-wrap: wrap;
+        padding-left: 25px;
     }
 
     #next_button {
         width: 100px;
         height: 40px;
         align-self: center;
+    }
+
+    #next_button_count {
+        padding: 10px 0px 0px 10px;
+    }
+
+    #warning_message {
+        color: darkgoldenrod;
+        padding: 10px 0px 0px 10px;
     }
 
     #final_output_html {
@@ -275,6 +311,18 @@
         cursor: pointer;
     }
 
+    xmp {
+        white-space: pre-wrap;
+        /* Since CSS 2.1 */
+        white-space: -moz-pre-wrap;
+        /* Mozilla, since 1999 */
+        white-space: -pre-wrap;
+        /* Opera 4-6 */
+        white-space: -o-pre-wrap;
+        /* Opera 7 */
+        word-wrap: break-word;
+    }
+
     @media(max-width: 1200px) {
         #container {
             display: flex;
@@ -287,9 +335,10 @@
         }
 
         #right_panel {
+            margin-top: 10px;
             width: 100%;
             border: none;
-            border-top: 2px dashed var(--vertical-divider-color);
+            /* border-top: 2px dashed var(--vertical-divider-color); */
         }
 
 
@@ -318,215 +367,166 @@
     <div id="container">
         <div id="left_panel">
 
-            <!-- <div id="left_panel_instructions">Welcome to the Custom Tabs Image HTML Generator.
+            <div id="left_panel_instructions">Welcome to the Custom Tabs Image HTML Generator.
                 Below, please paste some valid HTML you wish to edit. This panel includes a
                 dynamically generated list of all the attributes found in any valid html
                 submitted below. Please alter the attributes using the form below. When you are finished,
                 click 'Copy to Clipboard' to copy the generated HTML.</div>
 
-            <textarea name="" id="user_html_input" cols="30" rows="10"></textarea>
-            <button onclick="validateUserHTMLInput();">Validate</button> -->
+            <textarea id="user_html_input" oninput="handleUserInputtedHTML();" val=""></textarea>
+            <!-- <button onclick="validateUserHTMLInput();">Validate</button> -->
             <!-- <input type=text id="user_html_input"> -->
 
             <div id="input_fields">
-                <!-- DIV TAG ATTRIBUTES -->
-
-                <div id="div_tag_inputs" class="inputs_container">
-                    <div class="inputs_container_title"> div tag attributes: </div>
-                    <div class="inputs_container_item">
-                        <label for="div_class">div[class]<button class="hide_button"
-                                onclick="hideItem(this);">hide</button></label>
-                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="div_class" name="div_class"
-                            type="text"></input>
-                    </div>
-                    <div class="inputs_container_item">
-                        <label for="div_style">div[style]<button class="hide_button"
-                                onclick="hideItem(this);">hide</button></label>
-                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="div_style" name="div_style"
-                            type="text"></input>
-                    </div>
-
-                </div>
-                <!-- A TAG ATTRIBUTES -->
-
-                <div id="a_tag_inputs" class="inputs_container">
-                    <div class="inputs_container_title"> a tag attributes: </div>
-                    <div class="inputs_container_item">
-                        <label for="a_class">a[class]<button class="hide_button"
-                                onclick="hideItem(this);">hide</button></label>
-                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="a_class" name="a_class"
-                            type="text"></input>
-                    </div>
-                    <div class="inputs_container_item">
-                        <label for="a_href">a[href]<button class="hide_button"
-                                onclick="hideItem(this);">hide</button></label>
-                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="a_href" name="a_href"
-                            type="text"></input>
-                    </div>
-                    <div class="inputs_container_item">
-                        <label for="a_data-title">a[data-title]<button class="hide_button"
-                                onclick="hideItem(this);">hide</button></label>
-                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="a_data-title" name="a_data-title"
-                            type="text"></input>
-                    </div>
-                    <div class="inputs_container_item">
-                        <label for="a_data-lightbox-gallery">a[data-lightbox-gallery]<button class="hide_button"
-                                onclick="hideItem(this);">hide</button></label>
-                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="a_data-lightbox-gallery"
-                            name="a_data-lightbox-gallery" type="text"></input>
-                    </div>
-                </div>
-                <!-- IMG TAG ATTRIBUTES -->
-
-                <div id=img_tag_attributes class="inputs_container">
-
-                    <div class="inputs_container_title"> img tag attributes: </div>
-                    <div class="inputs_container_item">
-                        <label for="img_class">img[class]<button class="hide_button"
-                                onclick="hideItem(this);">hide</button></label>
-                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="img_class" name="img_class"
-                            type="text"></input>
-                    </div>
-                    <div class="inputs_container_item">
-                        <label for="img_style">img[style]<button class="hide_button"
-                                onclick="hideItem(this);">hide</button></label>
-                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="img_style" name="img_style"
-                            type="text"></input>
-                    </div>
-                    <div class="inputs_container_item">
-                        <label for="img_title">img[title]<button class="hide_button"
-                                onclick="hideItem(this);">hide</button></label>
-                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="img_title" name="img_title"
-                            type="text"></input>
-                    </div>
-                    <div class="inputs_container_item">
-                        <label for="img_src">img[src]<button class="hide_button"
-                                onclick="hideItem(this);">hide</button></label>
-                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="img_src" name="img_src"
-                            type="text"></input>
-                    </div>
-                    <div class="inputs_container_item">
-                        <label for="img_alt">img[alt]<button class="hide_button"
-                                onclick="hideItem(this);">hide</button></label>
-                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="img_alt" name="img_alt"
-                            type="text"></input>
-                    </div>
-                    <div class="inputs_container_item">
-                        <label for="img_width">img[width]<button class="hide_button"
-                                onclick="hideItem(this);">hide</button></label>
-                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="img_width" name="img_width"
-                            type="text"></input>
-                    </div>
-                    <div class="inputs_container_item">
-                        <label for="img_height">img[height]<button class="hide_button"
-                                onclick="hideItem(this);">hide</button></label>
-                        <input oninput="imageHTMLGenerator($(this).prop('id'));" id="img_height" name="img_height"
-                            type="text"></input>
-                    </div>
-                    <input type=text id="final_output_html"></input>
-                    <!-- <input type=text id="validate_input_html"></input> -->
-                </div>
-
-
-
                 <!-- <button id="copyToClipboardButton" onclick="copyToClipBoard();">Copy To Clipboard</button> -->
             </div>
-            <button id="next_button" class="button_styles">Next</button>
+            <div id="next_button_container">
+                <button id="next_button" class="button_styles">Next</button><span id="next_button_count"></span><span
+                    id="warning_message"></span>
+            </div>
+
         </div>
         <div id="right_panel">
             <div id="right_panel_title">Generated HTML Preview</div>
             <xmp id="output_html">
 
             </xmp>
+            <input type="text" id="final_output_html"></input>
             <button id="copyToClipboardButton" onclick="copyToClipBoard();">Copy To Clipboard</button>
         </div>
     </div>
+    <script src="libs/indent.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/html-inspector/0.8.2/html-inspector.js"></script>
     <script>
-        var HTMLbody = document.getElementsByTagName('body');
-        var output_object = {
-            'div_class': 'col-md-2 col-sm-3 col-xsm-6',
-            'div_style': 'text-align: center; padding: 20px',
-            'a_class': 'woocommerce-main-image zoom',
-            'a_href': '/wp-content/uploads/2018/08/small-quad.jpg',
-            'a_data-title': 'img title',
-            'a_data-lightbox-gallery': 'rearliftgal',
-            'img_class': 'attachment-shop-thumb-main size-shop-thumb-main wp-post-image',
-            'img_style': 'border: 2px solid #cfcfcf;',
-            'img_title': 'Walkin\' Wheels Full Support/4-Wheel SMALL',
-            'img_src': '/wp-content/uploads/2018/08/small-quad-150x150.jpg',
-            'img_alt': 'Walkin\' Wheels Full Support/4-Wheel SMALL',
-            'img_width': '150',
-            'img_height': '150'
-        }
 
         let trimmed = "empty";
 
-        function imageHTMLGenerator(id) {
+        function imageHTMLGenerator(element) {
+            // console.log('Element:', $(element)[0].id);
+            // console.log('Element\'s Grandparent: ', $(element).parent().parent()[0].id);
+            // console.log('This is #user_html_input: ', $('#user_html_input').val());
+            let grandpaId = $(element).parent().parent()[0].id;
+            let elId = $(element)[0].id;
 
-            output_object[id] = $("#" + id).val();
-            // console.log(output_object[id]);
+            var tin = document.createElement('span');
+            tin.innerHTML = $('#user_html_input').val();
+            // console.log('This is the element: ', $(grandpaId, tin));
+            // console.log('By tag name ', tin.getElementsByTagName(grandpaId));
+            let elementToEdit = tin.getElementsByTagName(grandpaId);
+            $(elementToEdit).attr(elId, $(element).val());
 
-            let generatedHTML = '<div \n'
-                + 'class="' + output_object['div_class'] + '" '
-                + 'style="' + output_object['div_style'] + '">\n'
-                + '\t<a class="' + output_object['a_class'] + '" \n'
-                + '\thref="' + output_object['a_href'] + '" \n'
-                + '\tdata-title="' + output_object['a_data-title'] + '" \n'
-                + '\tdata-lightbox-gallery=' + output_object['a_data-lightbox-gallery'] + '>\n'
-                + '\t\t<img \n'
-                + '\t\tclass="' + output_object['img_class'] + '" \n'
-                + '\t\tstyle="' + output_object['img_style'] + '" \n'
-                + '\t\ttitle="' + output_object['img_title'] + '" \n'
-                + '\t\tsrc="' + output_object['img_src'] + '" \n'
-                + '\t\talt="' + output_object['img_alt'] + '" \n'
-                + '\t\twidth="' + output_object['img_width'] + '" \n'
-                + '\t\theight="' + output_object['img_height'] + '"/>\n'
-                + '\t</a>\n'
-                + '</div>\n'
+            // console.log('Edited?:', elementToEdit);
+            var indented = indent.html(tin.innerHTML, { tabString: '\t' });
+            // console.log('This is indented: ', indented);
+
+            $('#output_html').text(indented); // TODO - Pu
+
+            // console.log('This is current input grandparent: ', tin.getElementById($(element)[0].id));
+
+
+            // output_object[id] = $("#" + id).val();
+            // // console.log(output_object[id])
 
 
             // Render to Screen
-            $('#output_html').html(generatedHTML);
+            // $('#output_html').html(generatedHTML);
             // Print to Input (where copyToClipboard grabs it from)
-            trimmed = generatedHTML.replace(/\n/g, "").replace(/\t/g, "").replace(/\s+/g, " ").replace(/(\r\n|\n|\r)/gm, " ");
-            $("#final_output_html").val(trimmed);
-
-
-
+            console.log('From first: ', $('#output_html').text())
+            trimmed = (tin.innerHTML).replace(/\n/g, "").replace(/\t/g, "").replace(/\s+/g, " ").replace(/(\r\n|\n|\r)/gm, " ");
+            // $("#final_output_html").html(tin.innerHTML);
+            console.log('trimmed ', trimmed);
         }
 
-        (function printDefaultImageHTML() {
-            let generatedHTML = '<div \n'
-                + 'class="' + output_object['div_class'] + '" '
-                + 'style="' + output_object['div_style'] + '">\n'
-                + '\t<a class="' + output_object['a_class'] + '" \n'
-                + '\thref="' + output_object['a_href'] + '" \n'
-                + '\tdata-title="' + output_object['a_data-title'] + '" \n'
-                + '\tdata-lightbox-gallery=' + output_object['a_data-lightbox-gallery'] + '>\n'
-                + '\t\t<img \n'
-                + '\t\tclass="' + output_object['img_class'] + '" \n'
-                + '\t\tstyle="' + output_object['img_style'] + '" \n'
-                + '\t\ttitle="' + output_object['img_title'] + '" \n'
-                + '\t\tsrc="' + output_object['img_src'] + '" \n'
-                + '\t\talt="' + output_object['img_alt'] + '" \n'
-                + '\t\twidth="' + output_object['img_width'] + '" \n'
-                + '\t\theight="' + output_object['img_height'] + '"/>\n'
-                + '\t</a>\n'
-                + '</div>\n'
+        function handleUserInputtedHTML() {
+            // Clear Input Fields
+            $('#input_fields').html('');
+            nextButtonCount = 0;
 
-            // Render to Screen
-            $('#output_html').html(generatedHTML);
+
             // Print to Input (where copyToClipboard grabs it from)
-            let trimmed = generatedHTML.replace(/\n/g, "").replace(/\t/g, "").replace(/\s+/g, " ").replace(/(\r\n|\n|\r)/gm, " ");
+            trimmed = ($('#user_html_input').val()).replace(/\n/g, "").replace(/\t/g, "").replace(/\s+/g, " ").replace(/(\r\n|\n|\r)/gm, " ");
 
+
+            // Render User Inputted HTML to Preview Screen
+            $('#output_html').html(trimmed);
             $("#final_output_html").val(trimmed);
+            $('#user_html_input').val(trimmed);
+            console.log('This is trimmed: ', trimmed);
+
+
+            // ==== Generate Inputs Form Based on Attributes found in User's HTML ==== /
+            var el = document.createElement('span');
+            el.innerHTML = trimmed;
+            // console.log('This is the element: ', el)
+
+
+
+            let inputFieldsElement = document.getElementById('input_fields');
+
+
+
+            let inputFieldsTags = $('*', el);
+
+
+
+            inputFieldsTags.each(function (index, item) {
+                inputsContainerElement = document.createElement('DIV');
+                inputsContainerElement.setAttribute('id', $(item)[0].localName)
+                inputsContainerElement.className = "inputs_container"
+                // console.log(index, ": ", $(item))
+
+                inputsContainerTextNode = document.createTextNode($(item)[0].localName);
+                inputsContainerElement.appendChild(inputsContainerTextNode);
+
+                inputFieldsElement.appendChild(inputsContainerElement);
+
+                Object.keys($(item)[0].attributes).forEach(function (key, value) {
+                    // console.log($(item)[0].attributes[key])
+                    console.log('$(item)[0].attributes[key]:', $($(item)[0].attributes[key])[0].name);
+                    let attrName = $($(item)[0].attributes[key])[0].name;
+                    labelItemElement = document.createElement('LABEL');
+                    labelItemElement.setAttribute('id', attrName + "_label")
+                    labelItemElement.setAttribute('text', attrName);
+                    labelItemElement.className = "input_item_label";
+
+                    // Add Edit Button to Label
+                    labelEditButton = document.createElement('BUTTON');
+                    labelEditButton.setAttribute('onclick', "hideItem(this);");
+                    labelEditButton.className = "hide_button";
+
+                    // Text Content for Edit Button
+                    buttonTextNode = document.createTextNode('hide');
+                    labelEditButton.appendChild(buttonTextNode);
+
+                    // Append button to Label
+                    labelItemElement.appendChild(labelEditButton);
+
+                    // Add Text Content to Label
+                    labelTextNode = document.createTextNode(attrName);
+                    labelItemElement.appendChild(labelTextNode);
+
+                    // Create Input
+                    inputsItemElement = document.createElement('INPUT');
+                    // Input type = 'text';
+                    inputsItemElement.type = 'text';
+                    inputsItemElement.setAttribute('id', attrName);
+                    inputsItemElement.setAttribute('oninput', 'imageHTMLGenerator(this);')
+                    labelItemElement.appendChild(inputsItemElement);
+                    inputsContainerElement.appendChild(labelItemElement);
+
+
+                })
+            })
 
 
             $('#input_fields .hide_button').each(function (index, item) {
                 $(item).click();
             })
-        })();
+
+            if (!inputFieldsTags.length) {
+                $('#output_html').text('No valid HTML found! Please try again!');
+            }
+        }
 
         function copyToClipBoard() {
             var copyText = document.getElementById("final_output_html");
@@ -547,53 +547,65 @@
 
         let combinedImages = '';
 
-
+        let nextButtonCount = 0;
         $('#next_button').on('click', function () {
             // Append new html to master string - combinedImages
-            combinedImages = combinedImages + trimmed;
-            // Post a preview of the output in the console
-            console.log('%c ' + combinedImages, 'background: #222; color: ' + getRandomColor());
-            // alert('Image saved! Preview output html in console')
+            if (trimmed !== "empty") {
+                combinedImages = combinedImages + trimmed;
+                // Post a preview of the output in the console
+                console.log('%c ' + combinedImages, 'background: #222; color: ' + getRandomColor());
+                // alert('Image saved! Preview output html in console')
 
-            $("#final_output_html").val(combinedImages);
+                $("#final_output_html").val(combinedImages);
+            }
+
+
+
+
+
+            let message = nextButtonCount + ' Copies Appended';
+
+            if (trimmed === 'empty') {
+                $('#warning_message').text(' Warning: EMPTY element found, nothing appended');
+                setTimeout(() => {
+                    $('#warning_message').text('');
+                }, 3000);
+
+            }
+
+            $('#next_button_count').text(message);
 
             // Clear Previous values
             $('#input_fields input').each(function (index, item) {
                 $(item).val('')
             })
+            if (trimmed !== 'empty') {
+                // Increment Next Button Count
+                nextButtonCount++
+            }
+
         })
 
         function hideItem(element) {
             // console.log('Inside hideItem: ', element);
-            if ($(element).parent().next().is(':hidden')) {
-                $(element).parent().next().show();
+            if ($(element).next().is(':hidden')) {
+                $(element).next().show();
                 $(element).text('hide');
-                $(element).parent().parent().css("padding", "10px 0px");
+                $(element).parent().css("padding", "10px 0px");
             } else {
-                $(element).parent().next().hide();
+                $(element).next().hide();
                 $(element).text('edit');
-                $(element).parent().parent().css("padding", "0px 0px");
+                $(element).parent().css("padding", "0px 0px");
             }
 
 
         }
 
-        function validateUserHTMLInput() {
-            setTimeout(() => {
-                $('#validate_input_html').val($('#user_html_input').val());
-            }, 0);
-            console.log('Inside validateUserHTML');
-            HTMLInspector.inspect({
-                domRoot: "#validate_input_html",
-                onComplete: function (errors) {
-                    console.log('Complete')
-                    errors.forEach(function (error) {
-                        // report errors to external service...
-                        console.log(error)
-                    })
-                }
-            })
-        }
+        // Not that useful: -- Need a validator that checks to make sure all tags line up
+        // function validateUserHTMLInput() { 
+        //     console.log('Inside validateUserHTML');
+        //     HTMLInspector.inspect("#output_html")
+        // }
 
 
     </script>
