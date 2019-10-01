@@ -166,9 +166,9 @@
     }
 
     #left_panel_instructions {
-        font-size: 20px;
-        padding: 20px;
-        font-weight: bold;
+        font-size: 18px;
+        padding: 23px;
+        /* font-weight: bold; */
         /* background: black; */
         margin-bottom: 10px;
         /* border: 2px dashed var(--secondary-color); */
@@ -370,7 +370,9 @@
             <div id="left_panel_instructions">Welcome to the Custom Tabs Image HTML Generator.
                 Below, please paste some valid HTML you wish to edit. This panel includes a
                 dynamically generated list of all the attributes found in any valid html
-                submitted below. Please alter the attributes using the form below. When you are finished,
+                submitted below. Please alter the attributes using the form below. If you need 
+                to append multiple altered copies of the same element, click 'Next' after you 
+                have entered the desired values. When you are finished,
                 click 'Copy to Clipboard' to copy the generated HTML.</div>
 
             <textarea id="user_html_input" oninput="handleUserInputtedHTML();" val=""></textarea>
