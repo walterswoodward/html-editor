@@ -154,11 +154,28 @@
         padding: 1%;
     }
 
+    /* Generated Attribute Field Options */
+
+    #tag_filter_options {
+        background: pink;
+
+    }
+
+    .afo_label {
+        color: teal;
+    }
+
+    .afo_checkbox {
+        width: 10px;
+    }
+
     /* Generated Inputs Section */
 
     #input_fields {
         display: flex;
         flex-wrap: wrap;
+        margin: 0px auto;
+        width: 90%;
     }
 
     .inputs_container {
@@ -185,13 +202,13 @@
     }
 
     .hide_button {
-        display:block;
+        display: block;
         background: transparent;
         border: none;
         font-weight: bold;
         font-size: 14px;
         padding-left: 0px;
-        width:26px;
+        width: 26px;
     }
 
     .hide_button:hover {
@@ -325,13 +342,17 @@
             <div id="left_panel_instructions">Welcome to the Custom Tabs Image HTML Generator.
                 Below, please paste some valid HTML you wish to edit. This panel includes a
                 dynamically generated list of all the attributes found in any valid html
-                submitted below. Please alter the attributes using the form below. If you need 
-                to append multiple altered copies of the same element, click 'Next' after you 
+                submitted below. Please alter the attributes using the form below. If you need
+                to append multiple altered copies of the same element, click 'Next' after you
                 have entered the desired values. When you are finished,
                 click 'Copy to Clipboard' to copy the generated HTML.</div>
 
             <textarea id="user_html_input" oninput="handleUserInputtedHTML();" val=""></textarea>
 
+            <!-- TODO: Dynamically generate this as well -->
+            <div id="tag_filter_options">
+
+            </div>
             <div id="input_fields">
             </div>
             <div id="next_button_container">
@@ -360,24 +381,61 @@
             // console.log('Element\'s Grandparent: ', $(element).parent().parent()[0].id);
             // console.log('This is #user_html_input: ', $('#user_html_input').val());
             let grandpaId = $(element).parent().parent()[0].id;
-            let elId = $(element)[0].id;
+            let grandpaId_index = grandpaId.replace(/.*-/, '');
+            let grandpaId_tag = grandpaId.replace(/-.*/, '');
+            let elId = ($(element)[0].id);
+            let elId_attr = ($(element)[0].id).replace(/-.*/, '');
+            // .replace(/-.*/,''); // have to take off unique index ex. id-2
 
-            var tin = document.createElement('span');
-            tin.innerHTML = $('#user_html_input').val();
-            // console.log('This is the element: ', $(grandpaId, tin));
-            // console.log('By tag name ', tin.getElementsByTagName(grandpaId));
-            let elementToEdit = tin.getElementsByTagName(grandpaId);
-            $(elementToEdit).attr(elId, $(element).val());
+            let frag = document.createElement('span');
+            frag.innerHTML = $('#user_html_input').val();
+            // console.log('This is the element: ', $(grandpaId, frag));
+            // console.log('By tag name ', frag.getElementsByTagName(grandpaId));
+            // let elementToEdit = FIND CORRECT ELEMENT TO EDIT USING INDICES IN ID's
+            // console.log('This is elId: ', elId);
+            // console.log('This is grandpaId: ', grandpaId);
+            // console.log('This is grandpaId tag: ', grandpaId_tag);
+            // console.log('This is grandpaId index: ', grandpaId_index);
+            // let userInputtedTags = $('*', frag.innerHTML);
+            let tagList = $('*', frag);
+
+            let fragTagItemsTally = {};
+            tagList.each(function (index, item) {
+
+                let tagListItemName = $(item)[0].nodeName;
+                // console.log(tally[attrName])
+                if (fragTagItemsTally[`${tagListItemName}`] !== undefined) {
+                    fragTagItemsTally[`${tagListItemName}`] = fragTagItemsTally[`${tagListItemName}`] + 1;
+                } else {
+                    fragTagItemsTally[`${tagListItemName}`] = 0;
+                }
+
+                // console.log($(item)[0].nodeName)
+
+
+                if (tagListItemName.toLowerCase() == grandpaId_tag && grandpaId_index == fragTagItemsTally[`${tagListItemName}`]) {
+                    // console.log('item tally:', fragTagItemsTally[`${tagListItemName}`]);
+                    // console.log(tagListItemName.toLowerCase())
+                    console.log('This is your item:', $(item))
+                    let elementToEdit = $(item);
+                    elementToEdit.attr(elId_attr, $(element).val());
+
+                }
+            })
+            // $(elementToEdit).attr(elId, $(element).val());
 
             // console.log('Edited?:', elementToEdit);
-            var indented = indent.html(tin.innerHTML, { tabString: '\t' });
+            var indented = indent.html(frag.innerHTML, { tabString: '\t' });
 
             // console.log('This is indented: ', indented);
             $('#output_html').text(indented);
 
-            trimmed = (tin.innerHTML).replace(/\n/g, "").replace(/\t/g, "").replace(/\s+/g, " ").replace(/(\r\n|\n|\r)/gm, " ");
+            trimmed = (frag.innerHTML).replace(/\n/g, "").replace(/\t/g, "").replace(/\s+/g, " ").replace(/(\r\n|\n|\r)/gm, " ");
 
         }
+
+
+        var tagAlreadyAdded = [];
 
         function handleUserInputtedHTML() {
             // Clear Input Fields
@@ -393,7 +451,7 @@
             $('#output_html').html(trimmed);
             $("#final_output_html").val(trimmed);
             $('#user_html_input').val(trimmed);
-            console.log('This is trimmed: ', trimmed);
+            // console.log('This is trimmed: ', trimmed);
 
 
             // ==== Generate Inputs Form Based on Attributes found in User's HTML ==== /
@@ -401,33 +459,87 @@
             el.innerHTML = trimmed;
             // console.log('This is the element: ', el)
 
+            let tagFilterOptionsElement = document.getElementById('tag_filter_options');
+
+            // Create Tag Filter Options Text
+            tagFilterOptionsTextNode = document.createTextNode('Tag Filter Options:');
+            // Append Label Text
+            tagFilterOptionsElement.appendChild(tagFilterOptionsTextNode);
 
 
             let inputFieldsElement = document.getElementById('input_fields');
+            let userInputtedTags = $('*', el);
+            let tally = {};
+
+            userInputtedTags.each(function (index, item) {
+
+                let tagName = $(item)[0].localName;
+                // console.log(tagName)
+                // console.log(tally[tagName])
+                if (tally[`${tagName}`] !== undefined) {
+                    tally[`${tagName}`] = tally[`${tagName}`] + 1;
+                } else {
+                    tally[`${tagName}`] = 0;
+                }
+
+                // Only create a new Attributes Filter Option Checkbox IF one with
+                // the same name has not already been made.
+                if (tagAlreadyAdded.indexOf(tagName) === -1) {
+                    // Populate Attributes Filter Options Section:
+                    tagFilterOptionsLabel = document.createElement('LABEL');
+                    tagFilterOptionsLabel.className = "afo_label";
+
+                    // Create Label Text
+                    tagFilterOptionsLabelTextNode = document.createTextNode($(item)[0].localName);
+                    // Append Label Text
+                    tagFilterOptionsLabel.appendChild(tagFilterOptionsLabelTextNode);
+
+                    // Create Checkbox Input Element
+                    tagFilterOptionsLabelCheckbox = document.createElement('INPUT');
+                    tagFilterOptionsLabelCheckbox.type = 'checkbox';
+                    tagFilterOptionsLabelCheckbox.className = "afo_checkbox";
+                    tagFilterOptionsLabelCheckbox.setAttribute('onclick', 'toggleAttrInputFields(this);')
+                    // Append Checkbox
+                    tagFilterOptionsLabel.appendChild(tagFilterOptionsLabelCheckbox);
+
+                    // Append Label to attrFilterOptions Element
+                    tagFilterOptionsElement.appendChild(tagFilterOptionsLabel);
+
+                    // Push Added Attribute Name to List
+                    tagAlreadyAdded.push(tagName)
+                }
 
 
 
-            let inputFieldsTags = $('*', el);
 
-
-
-            inputFieldsTags.each(function (index, item) {
+                // Populate Input Section:
                 inputsContainerElement = document.createElement('DIV');
-                inputsContainerElement.setAttribute('id', $(item)[0].localName)
-                inputsContainerElement.className = "inputs_container"
+                inputsContainerElement.setAttribute('id', tagName + '-' + tally[tagName]);
+                inputsContainerElement.className = "inputs_container";
                 // console.log(index, ": ", $(item))
 
-                inputsContainerTextNode = document.createTextNode($(item)[0].localName);
+
+
+                inputsContainerTextNode = document.createTextNode(tagName + '#' + (tally[tagName] + 1));
                 inputsContainerElement.appendChild(inputsContainerTextNode);
 
                 inputFieldsElement.appendChild(inputsContainerElement);
 
+                let attrTally = {};
+
                 Object.keys($(item)[0].attributes).forEach(function (key, value) {
-                    // console.log($(item)[0].attributes[key])
-                    console.log('$(item)[0].attributes[key]:', $($(item)[0].attributes[key])[0].name);
                     let attrName = $($(item)[0].attributes[key])[0].name;
+                    // console.log(tally[attrName])
+                    if (attrTally[`${attrName}`] !== undefined) {
+                        attrTally[`${attrName}`] = attrTally[`${attrName}`] + 1;
+                    } else {
+                        attrTally[`${attrName}`] = 0;
+                    }
+                    // console.log($(item)[0].attributes[key])
+                    // console.log('$(item)[0].attributes[key]:', $($(item)[0].attributes[key])[0].name);
+
                     labelItemElement = document.createElement('LABEL');
-                    labelItemElement.setAttribute('id', attrName + "_label")
+                    labelItemElement.setAttribute('id', attrName + "-" + attrTally[`${attrName}`])
                     labelItemElement.setAttribute('text', attrName);
                     labelItemElement.className = "input_item_label";
 
@@ -451,7 +563,7 @@
                     inputsItemElement = document.createElement('INPUT');
                     // Input type = 'text';
                     inputsItemElement.type = 'text';
-                    inputsItemElement.setAttribute('id', attrName);
+                    inputsItemElement.setAttribute('id', attrName + "-" + attrTally[`${attrName}`]);
                     inputsItemElement.setAttribute('oninput', 'imageHTMLGenerator(this);')
                     labelItemElement.appendChild(inputsItemElement);
                     inputsContainerElement.appendChild(labelItemElement);
@@ -465,7 +577,7 @@
                 $(item).click();
             })
 
-            if (!inputFieldsTags.length) {
+            if (!userInputtedTags.length) {
                 $('#output_html').text('No valid HTML found! Please try again!');
             }
         }
@@ -541,6 +653,21 @@
                 $(element).text('edit');
                 $(element).parent().css("padding", "0px 0px");
             }
+        }
+
+        function toggleAttrInputFields(element) {
+            let attrFieldsNameToToggle = $(element).parent()[0].textContent;
+            console.log(attrFieldsNameToToggle);
+
+            $('.inputs_container').each(function (index, item) {
+                let itemId = $(item).attr('id')
+                if (itemId.indexOf(attrFieldsNameToToggle) !== -1) {
+                    $(item).toggle();
+                }
+            })
+
+
+
         }
 
     </script>
