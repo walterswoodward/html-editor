@@ -15,76 +15,45 @@
 
 </head>
 <style>
-    body {
-        --main-bg-color: white;
-        --main-color: dodgerblue;
-        --main-bg-color-lighter: rgba(50, 50, 50);
-        --secondary-color: rgb(89, 119, 30);
-        --vertical-divider-color: gold;
-        --horizontal-divider-color: gold;
-        background: url('pic01.jpg');
-        background-size: cover;
-        font-family: 'Nunito', sans-serif;
+    /* Additional Normalization */
+
+    button:focus,
+    textarea:focus {
+        outline: 0;
     }
 
-    #container {
-        display: flex;
-        /* margin: 0px auto; */
-        width: 100%;
-
+    /* Global Tag Settings */
+    label {
+        margin-bottom: 5px;
     }
 
-
-
-    #imageHTMLGenerator_object_input {
-        /* width: 40%; */
-        height: 300px;
-        text-align: start;
-    }
-
-    #nav {
-        width: 100%;
-        /* background: var(--main-bg-color); */
-        color: var(--main-color);
-        padding: 5px 0px;
-        /* border-bottom: 2px dashed var(--horizontal-divider-color); */
-    }
-
-    #nav_title {
-        font-size: 40px;
-        padding: 20px 20px;
-        font-weight: bold;
-        color: var(--main-color);
-    }
-
-    #nav_title_second_half {
-        color: var(--secondary-color);
-        border-left: 1px solid darkgray;
-        padding-left: 10px;
-    }
-
-    #copyToClipboardButton {
+    input {
         width: 200px;
-        height: 50px;
-        font-size: 20px;
-        font-weight: bold;
-        color: var(--main-color);
-        background: var(--main-bg-color);
-        /* border: 5px dashed white; */
-        /* margin: 10px; */
-        transition: background 0.5s;
-        transition: color 0.5s;
-        transition: 'border-color'0.5s;
-        transition: cursor 0.1s;
-        /* -webkit-box-shadow: 7px 7px 7px -5px white;
-        box-shadow: 7px 7px 7px -5px white; */
-        border-style: outset;
-        border-top: 4px solid var(--main-bg-color);
-        border-bottom: 4px solid var(--main-bg-color-lighter);
-        border-left: 4px solid var(--main-bg-color);
-        border-right: 4px solid var(--main-bg-color-lighter);
-        border-radius: 4px;
+        padding: 2px;
+        -webkit-box-shadow:
+            inset 0 0 8px rgba(0, 0, 0, 0.1),
+            0 0 16px rgba(0, 0, 0, 0.1);
+        -moz-box-shadow:
+            inset 0 0 8px rgba(0, 0, 0, 0.1),
+            0 0 16px rgba(0, 0, 0, 0.1);
+        box-shadow:
+            inset 0 0 8px rgba(0, 0, 0, 0.1),
+            0 0 16px rgba(0, 0, 0, 0.1);
+        padding: 5px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 5px;
+    }
 
+    xmp {
+        white-space: pre-wrap;
+        /* Since CSS 2.1 */
+        white-space: -moz-pre-wrap;
+        /* Mozilla, since 1999 */
+        white-space: -pre-wrap;
+        /* Opera 4-6 */
+        white-space: -o-pre-wrap;
+        /* Opera 7 */
+        word-wrap: break-word;
     }
 
     .button_styles {
@@ -110,15 +79,6 @@
         cursor: pointer;
     }
 
-    button:focus,
-    textarea:focus {
-        outline: 0;
-    }
-
-    .button_styles:focus {
-        outline: 0;
-    }
-
     .button_styles:active {
         color: yellowgreen;
         border-color: yellowgreen;
@@ -128,50 +88,62 @@
         border-right: 4px solid var(--main-bg-color);
     }
 
-    #copyToClipboardButton:hover {
-        cursor: pointer;
+
+    /* Containers */
+
+    body {
+        --main-bg-color: white;
+        --main-color: dodgerblue;
+        --main-bg-color-lighter: rgba(50, 50, 50);
+        --secondary-color: rgb(89, 119, 30);
+        --vertical-divider-color: gold;
+        --horizontal-divider-color: gold;
+        background: url('pic01.jpg');
+        background-size: cover;
+        font-family: 'Nunito', sans-serif;
     }
 
-    #copyToClipboardButton:active {
-        color: yellowgreen;
-        border-color: yellowgreen;
-        border-top: 4px solid var(--main-bg-color-lighter);
-        border-bottom: 4px solid var(--main-bg-color);
-        border-left: 4px solid var(--main-bg-color-lighter);
-        border-right: 4px solid var(--main-bg-color);
-    }
-
-    #copyToClipboardButton:focus {
-        outline: 0;
-    }
-
-
-
-    #generateImageHTML_button:hover {
-        cursor: pointer;
+    #container {
+        display: flex;
+        width: 100%;
 
     }
+
+    /* Navigation Bar */
+
+    #nav {
+        width: 100%;
+        color: var(--main-color);
+        padding: 5px 0px;
+    }
+
+    #nav_title {
+        font-size: 40px;
+        padding: 20px 20px;
+        font-weight: bold;
+        color: var(--main-color);
+    }
+
+    #nav_title_second_half {
+        color: var(--secondary-color);
+        border-left: 1px solid darkgray;
+        padding-left: 10px;
+    }
+
+    /* Left Side / Top Pane */
 
     #left_panel {
         display: flex;
         flex-direction: column;
-        /* align-items: center; */
         width: 50%;
-        /* border-right: 2px dashed var(--vertical-divider-color); */
         z-index: 2;
-        /* background-color: var(--main-bg-color); */
         color: var(--secondary-color);
-
-
     }
 
     #left_panel_instructions {
         font-size: 18px;
         padding: 23px;
-        /* font-weight: bold; */
-        /* background: black; */
         margin-bottom: 10px;
-        /* border: 2px dashed var(--secondary-color); */
     }
 
     #user_html_input {
@@ -182,34 +154,7 @@
         padding: 2%;
     }
 
-    #right_panel {
-        background: rgba(0, 0, 0, 0.9);
-        z-index: 1;
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        align-content: center;
-        align-items: center;
-        /* background-color: var(--main-bg-color); */
-        color: var(--main-color);
-        height: 100vh;
-        overflow: hidden;
-    }
-
-    #right_panel_title {
-        font-size: 25px;
-        font-weight: bold;
-        padding: 20px;
-    }
-
-    #output_html {
-        /* display: flex; */
-        /* flex-direction: column;
-        align-items: center; */
-        padding: 15px;
-        font-size: 16px;
-        z-index: 0;
-    }
+    /* Generated Inputs Section */
 
     #input_fields {
         display: flex;
@@ -234,14 +179,6 @@
         font-weight: normal;
     }
 
-    /* .inputs_container_item {
-        padding: 10px 0px;
-        font-size: 14px;
-        display: flex;
-        flex-direction: column;
-        font-weight: normal;
-    } */
-
     .input_item_label {
         display: flex;
         flex-direction: column;
@@ -250,28 +187,20 @@
         font-weight: normal;
     }
 
-    label {
-        margin-bottom: 5px;
+    .hide_button {
+        background: transparent;
+        border: none;
+        font-weight: bold;
+        font-size: 14px;
     }
 
-    input {
-        width: 200px;
-        padding: 2px;
-        -webkit-box-shadow:
-            inset 0 0 8px rgba(0, 0, 0, 0.1),
-            0 0 16px rgba(0, 0, 0, 0.1);
-        -moz-box-shadow:
-            inset 0 0 8px rgba(0, 0, 0, 0.1),
-            0 0 16px rgba(0, 0, 0, 0.1);
-        box-shadow:
-            inset 0 0 8px rgba(0, 0, 0, 0.1),
-            0 0 16px rgba(0, 0, 0, 0.1);
-        padding: 5px;
-        background: rgba(255, 255, 255, 0.5);
-        border-radius: 5px;
+    .hide_button:hover {
+        color: yellowgreen;
+        cursor: pointer;
+        text-align: start;
     }
 
-
+    /* Next Button */
 
     #next_button_container {
         display: flex;
@@ -293,35 +222,77 @@
         padding: 10px 0px 0px 10px;
     }
 
+    /* Right Panel */
+
+    #right_panel {
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 1;
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        align-items: center;
+        color: var(--main-color);
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    #right_panel_title {
+        font-size: 25px;
+        font-weight: bold;
+        padding: 20px;
+    }
+
+    #output_html {
+        padding: 15px;
+        font-size: 16px;
+        z-index: 0;
+    }
+
+
+    #copyToClipboardButton {
+        width: 200px;
+        height: 50px;
+        font-size: 20px;
+        font-weight: bold;
+        color: var(--main-color);
+        background: var(--main-bg-color);
+        transition: background 0.5s;
+        transition: color 0.5s;
+        transition: 'border-color'0.5s;
+        transition: cursor 0.1s;
+        border-style: outset;
+        border-top: 4px solid var(--main-bg-color);
+        border-bottom: 4px solid var(--main-bg-color-lighter);
+        border-left: 4px solid var(--main-bg-color);
+        border-right: 4px solid var(--main-bg-color-lighter);
+        border-radius: 4px;
+
+    }
+
+
+
+    #copyToClipboardButton:hover {
+        cursor: pointer;
+    }
+
+    #copyToClipboardButton:active {
+        color: yellowgreen;
+        border-color: yellowgreen;
+        border-top: 4px solid var(--main-bg-color-lighter);
+        border-bottom: 4px solid var(--main-bg-color);
+        border-left: 4px solid var(--main-bg-color-lighter);
+        border-right: 4px solid var(--main-bg-color);
+    }
+
     #final_output_html {
         position: absolute;
         z-index: -1;
         top: -1000px;
     }
 
-    .hide_button {
-        background: transparent;
-        border: none;
-        font-weight: bold;
-        font-size: 14px;
-    }
 
-    .hide_button:hover {
-        color: yellowgreen;
-        cursor: pointer;
-    }
-
-    xmp {
-        white-space: pre-wrap;
-        /* Since CSS 2.1 */
-        white-space: -moz-pre-wrap;
-        /* Mozilla, since 1999 */
-        white-space: -pre-wrap;
-        /* Opera 4-6 */
-        white-space: -o-pre-wrap;
-        /* Opera 7 */
-        word-wrap: break-word;
-    }
+    /* Media Queries */
 
     @media(max-width: 1200px) {
         #container {
@@ -338,7 +309,6 @@
             margin-top: 10px;
             width: 100%;
             border: none;
-            /* border-top: 2px dashed var(--vertical-divider-color); */
         }
 
 
@@ -346,21 +316,6 @@
 </style>
 
 <body>
-    <!-- {
-                    div_class: 'col-md-2 col-sm-3 col-xsm-6',
-                    div_style: 'text-align: center; padding: 20px',
-                    a_class: 'woocommerce-main-image zoom',
-                    a[href]: '/wp-content/uploads/2018/08/small-quad.jpg',
-                    a_data-title: 'img title',
-                    a[data-lightbox-gallery]: 'rearliftgal',
-                    img_class: 'attachment-shop-thumb-main size-shop-thumb-main wp-post-image',
-                    img_style: 'border: 2px solid #cfcfcf;',
-                    img_title: 'Walkin' Wheels Full Support/4-Wheel SMALL',
-                    img_src: '/wp-content/uploads/2018/08/small-quad-150x150.jpg',
-                    img_alt: 'Walkin' Wheels Full Support/4-Wheel SMALL',
-                    img_width: '150',
-                    img_height: '150'
-                } -->
     <div id="nav">
         <div id='nav_title'>Easy <span id="nav_title_second_half">HTML Generator</span></div>
     </div>
@@ -376,11 +331,8 @@
                 click 'Copy to Clipboard' to copy the generated HTML.</div>
 
             <textarea id="user_html_input" oninput="handleUserInputtedHTML();" val=""></textarea>
-            <!-- <button onclick="validateUserHTMLInput();">Validate</button> -->
-            <!-- <input type=text id="user_html_input"> -->
 
             <div id="input_fields">
-                <!-- <button id="copyToClipboardButton" onclick="copyToClipBoard();">Copy To Clipboard</button> -->
             </div>
             <div id="next_button_container">
                 <button id="next_button" class="button_styles">Next</button><span id="next_button_count"></span><span
@@ -419,24 +371,12 @@
 
             // console.log('Edited?:', elementToEdit);
             var indented = indent.html(tin.innerHTML, { tabString: '\t' });
+
             // console.log('This is indented: ', indented);
+            $('#output_html').text(indented);
 
-            $('#output_html').text(indented); // TODO - Pu
-
-            // console.log('This is current input grandparent: ', tin.getElementById($(element)[0].id));
-
-
-            // output_object[id] = $("#" + id).val();
-            // // console.log(output_object[id])
-
-
-            // Render to Screen
-            // $('#output_html').html(generatedHTML);
-            // Print to Input (where copyToClipboard grabs it from)
-            console.log('From first: ', $('#output_html').text())
             trimmed = (tin.innerHTML).replace(/\n/g, "").replace(/\t/g, "").replace(/\s+/g, " ").replace(/(\r\n|\n|\r)/gm, " ");
-            // $("#final_output_html").html(tin.innerHTML);
-            console.log('trimmed ', trimmed);
+
         }
 
         function handleUserInputtedHTML() {
@@ -601,16 +541,7 @@
                 $(element).text('edit');
                 $(element).parent().css("padding", "0px 0px");
             }
-
-
         }
-
-        // Not that useful: -- Need a validator that checks to make sure all tags line up
-        // function validateUserHTMLInput() { 
-        //     console.log('Inside validateUserHTML');
-        //     HTMLInspector.inspect("#output_html")
-        // }
-
 
     </script>
 </body>
