@@ -350,8 +350,11 @@
             <textarea id="user_html_input" oninput="handleUserInputtedHTML();" val=""></textarea>
 
             <!-- TODO: Dynamically generate this as well -->
-            <div id="tag_filter_options">
-
+            <div id=filter_options>
+                <div id="tag_filter_options">
+                </div>
+                <div id="attr_filter_options">
+                </div>
             </div>
             <div id="input_fields">
             </div>
@@ -435,11 +438,20 @@
         }
 
 
-        var tagAlreadyAdded = [];
+        let tagAlreadyAdded = [];
+        let attrAlreadyAdded = [];
+
 
         function handleUserInputtedHTML() {
-            // Clear Input Fields
+            // Clear Fields
             $('#input_fields').html('');
+            $('#attr_filter_options').html('');
+            $('#tag_filter_options').html('');
+
+            // Clear Tracker Arrays:
+            tagAlreadyAdded = [];
+            attrAlreadyAdded = [];
+
             nextButtonCount = 0;
 
 
@@ -459,12 +471,19 @@
             el.innerHTML = trimmed;
             // console.log('This is the element: ', el)
 
+            // Create Reference to tag_filter_options element
             let tagFilterOptionsElement = document.getElementById('tag_filter_options');
-
             // Create Tag Filter Options Text
             tagFilterOptionsTextNode = document.createTextNode('Tag Filter Options:');
             // Append Label Text
             tagFilterOptionsElement.appendChild(tagFilterOptionsTextNode);
+
+            // Create Reference to attr_filter_options element
+            let attrFilterOptionsElement = document.getElementById('attr_filter_options');
+            // Create Tag Filter Options Text
+            attrFilterOptionsTextNode = document.createTextNode('Attribute Filter Options:');
+            // Append Label Text
+            attrFilterOptionsElement.appendChild(attrFilterOptionsTextNode);
 
 
             let inputFieldsElement = document.getElementById('input_fields');
@@ -498,7 +517,9 @@
                     tagFilterOptionsLabelCheckbox = document.createElement('INPUT');
                     tagFilterOptionsLabelCheckbox.type = 'checkbox';
                     tagFilterOptionsLabelCheckbox.className = "afo_checkbox";
-                    tagFilterOptionsLabelCheckbox.setAttribute('onclick', 'toggleAttrInputFields(this);')
+                    tagFilterOptionsLabelCheckbox.setAttribute('onclick', 'toggleTagInputFields(this);');
+                    tagFilterOptionsLabelCheckbox.setAttribute('checked', 'true');
+
                     // Append Checkbox
                     tagFilterOptionsLabel.appendChild(tagFilterOptionsLabelCheckbox);
 
@@ -508,6 +529,8 @@
                     // Push Added Attribute Name to List
                     tagAlreadyAdded.push(tagName)
                 }
+
+
 
 
 
@@ -534,6 +557,35 @@
                         attrTally[`${attrName}`] = attrTally[`${attrName}`] + 1;
                     } else {
                         attrTally[`${attrName}`] = 0;
+                    }
+
+
+                    // Only create a new Attributes Filter Option Checkbox IF one with
+                    // the same name has not already been made.
+                    if (attrAlreadyAdded.indexOf(attrName) === -1) {
+                        // Populate Attributes Filter Options Section:
+                        attrFilterOptions = document.createElement('LABEL');
+                        attrFilterOptions.className = "afo_label";
+
+                        // Create Label Text
+                        attrFilterOptionsTextNode = document.createTextNode(attrName);
+                        // Append Label Text
+                        attrFilterOptions.appendChild(attrFilterOptionsTextNode);
+
+                        // Create Checkbox Input Element
+                        attrFilterOptionsCheckbox = document.createElement('INPUT');
+                        attrFilterOptionsCheckbox.type = 'checkbox';
+                        attrFilterOptionsCheckbox.className = "afo_checkbox";
+                        attrFilterOptionsCheckbox.setAttribute('onclick', 'toggleAttrInputFields(this);');
+                        attrFilterOptionsCheckbox.setAttribute('checked', 'true');
+                        // Append Checkbox
+                        attrFilterOptions.appendChild(attrFilterOptionsCheckbox);
+
+                        // Append Label to attrFilterOptions Element
+                        attrFilterOptionsElement.appendChild(attrFilterOptions);
+
+                        // Push Added Attribute Name to List
+                        attrAlreadyAdded.push(attrName)
                     }
                     // console.log($(item)[0].attributes[key])
                     // console.log('$(item)[0].attributes[key]:', $($(item)[0].attributes[key])[0].name);
@@ -655,9 +707,9 @@
             }
         }
 
-        function toggleAttrInputFields(element) {
+        function toggleTagInputFields(element) {
             let attrFieldsNameToToggle = $(element).parent()[0].textContent;
-            console.log(attrFieldsNameToToggle);
+            // console.log(attrFieldsNameToToggle);
 
             $('.inputs_container').each(function (index, item) {
                 let itemId = $(item).attr('id')
@@ -665,9 +717,20 @@
                     $(item).toggle();
                 }
             })
+        }
 
 
+        function toggleAttrInputFields(element) {
+            let attrFieldsNameToToggle = $(element).parent()[0].textContent;
+            // console.log(attrFieldsNameToToggle);
 
+            $('.inputs_container label').each(function (index, item) {
+                console.log(item)
+                let itemId = $(item).attr('id')
+                if (itemId.indexOf(attrFieldsNameToToggle) !== -1) {
+                    $(item).toggle();
+                }
+            })
         }
 
     </script>
