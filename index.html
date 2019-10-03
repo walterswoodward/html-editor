@@ -152,6 +152,10 @@
         height: 100px;
         padding: 1%;
         margin-bottom: 5px;
+        border: lightblue;
+        -webkit-box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.75);
+box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.75);
     }
 
     /* Generated Attribute Field Options */
@@ -278,10 +282,20 @@
         padding: 20px;
     }
 
-    #output_html {
+    #clipboard_preview, #output_html {
         padding: 15px;
         font-size: 16px;
         z-index: 0;
+    }
+
+    #clipboard_preview_title {
+        color: rgb(255, 255, 102);
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    #clipboard_preview {
+        color:rgb(255, 255, 102);
     }
 
 
@@ -357,13 +371,7 @@
     <div id="container">
         <div id="left_panel">
 
-            <div id="left_panel_instructions">Welcome to the Custom Tabs Image HTML Generator.
-                Below, please paste some valid HTML you wish to edit. This panel includes a
-                dynamically generated list of all the attributes found in any valid html
-                submitted below. Please alter the attributes using the form below. If you need
-                to append multiple altered copies of the same element, click 'Next' after you
-                have entered the desired values. When you are finished,
-                click 'Copy to Clipboard' to copy the generated HTML.</div>
+            <div id="left_panel_instructions">HTML to Edit:</div>
 
             <textarea id="user_html_input" oninput="handleUserInputtedHTML();" val=""></textarea>
 
@@ -388,6 +396,8 @@
 
             </xmp>
             <input type="text" id="final_output_html"></input>
+            <div id="clipboard_preview_title">**clipboard preview will appear below once [Next] button is pressed**</div>
+            <xmp id="clipboard_preview"></xmp>
             <button id="copyToClipboardButton" onclick="copyToClipBoard();">Copy To Clipboard</button>
         </div>
     </div>
@@ -642,8 +652,6 @@
                 })
             })
 
-            $('#filter_options input').click();
-
             $('#input_fields .hide_button').each(function (index, item) {
                 // $(item).click();
             })
@@ -682,6 +690,7 @@
                 // alert('Image saved! Preview output html in console')
 
                 $("#final_output_html").val(combinedImages);
+                $("#clipboard_preview").html(combinedImages);
             }
 
             if (trimmed !== '') {
@@ -778,9 +787,10 @@
 
         }
 
-        // Just for DEBUGGING - DELETE
-        $('#user_html_input').val(`<div id="left_panel"> <div id="left_panel_instructions">Welcome to the Custom Tabs Image HTML Generator. Below, please paste some valid HTML you wish to edit. This panel includes a dynamically generated list of all the attributes found in any valid html submitted below. Please alter the attributes using the form below. If you need to append multiple altered copies of the same element, click 'Next' after you have entered the desired values. When you are finished, click 'Copy to Clipboard' to copy the generated HTML.</div> <textarea id="user_html_input" oninput="handleUserInputtedHTML();" val=""></textarea> <!-- TODO: Dynamically generate this as well --> <div id="filter_options"> <div id="tag_filter_options">Tag Filter Options</div> <div id="attr_filter_options">Attribute Filter Options</div> </div> <div id="input_fields"></div> <div id="next_button_container"> <button id="next_button" class="button_styles">Next</button><span id="next_button_count"></span><span id="warning_message"></span> </div> </div>`);
+        // Inject Placeholder
+        $('#user_html_input').val(`<img src="edit/this/src" alt="edit/this/alt"></img>`);
         $('#user_html_input').trigger('oninput');
+        $()
 
     </script>
 </body>
