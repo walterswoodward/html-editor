@@ -4,7 +4,6 @@
 
 <head>
     <meta charset="utf-8">
-
     <title>Easy HTML Generator</title>
     <meta name="description"
         content="Allows users to input valid HTML, and then edit attributes using an intuatively designed UI.">
@@ -138,35 +137,55 @@
         width: 50%;
         z-index: 2;
         color: var(--secondary-color);
+        padding: 0px 10px;
     }
 
     #left_panel_instructions {
         font-size: 18px;
-        padding: 23px;
+        /* padding: 23px; */
         margin-bottom: 10px;
     }
 
     #user_html_input {
         display: flex;
-        margin: 0px 3% 10px 3%;
-        width: 90%;
+        /* margin: 0px  10px 3%; */
         height: 100px;
         padding: 1%;
+        margin-bottom: 5px;
     }
 
     /* Generated Attribute Field Options */
 
-    #tag_filter_options {
-        background: pink;
+    #filter_options {
+        display: flex;
+    }
+
+    #attr_filter_options {
+        margin: 5px 10px;
 
     }
 
+    #tag_filter_options {
+        margin: 5px 10px;
+    }
+
     .afo_label {
-        color: teal;
+        display: flex;
+        color: grey;
+        margin: 0px 5px;
+        justify-content: space-between;
     }
 
     .afo_checkbox {
         width: 10px;
+        align-self: flex-end;
+    }
+
+    .afo_checkbox[type='checkbox'] {
+        width: 20px;
+        height: 20px;
+        margin: 0px 2px;
+
     }
 
     /* Generated Inputs Section */
@@ -174,8 +193,7 @@
     #input_fields {
         display: flex;
         flex-wrap: wrap;
-        margin: 0px auto;
-        width: 90%;
+        /* margin: 0px auto; */
     }
 
     .inputs_container {
@@ -221,7 +239,7 @@
 
     #next_button_container {
         display: flex;
-        padding-left: 25px;
+        /* padding-top: 5px; */
     }
 
     #next_button {
@@ -474,14 +492,14 @@
             // Create Reference to tag_filter_options element
             let tagFilterOptionsElement = document.getElementById('tag_filter_options');
             // Create Tag Filter Options Text
-            tagFilterOptionsTextNode = document.createTextNode('Tag Filter Options:');
+            tagFilterOptionsTextNode = document.createTextNode('Tag Filter Options');
             // Append Label Text
             tagFilterOptionsElement.appendChild(tagFilterOptionsTextNode);
 
             // Create Reference to attr_filter_options element
             let attrFilterOptionsElement = document.getElementById('attr_filter_options');
             // Create Tag Filter Options Text
-            attrFilterOptionsTextNode = document.createTextNode('Attribute Filter Options:');
+            attrFilterOptionsTextNode = document.createTextNode('Attribute Filter Options');
             // Append Label Text
             attrFilterOptionsElement.appendChild(attrFilterOptionsTextNode);
 
@@ -624,9 +642,10 @@
                 })
             })
 
+            $('#filter_options input').click();
 
             $('#input_fields .hide_button').each(function (index, item) {
-                $(item).click();
+                // $(item).click();
             })
 
             if (!userInputtedTags.length) {
@@ -725,13 +744,43 @@
             // console.log(attrFieldsNameToToggle);
 
             $('.inputs_container label').each(function (index, item) {
-                console.log(item)
+                // console.log(item)
                 let itemId = $(item).attr('id')
                 if (itemId.indexOf(attrFieldsNameToToggle) !== -1) {
                     $(item).toggle();
                 }
             })
+
+            // If after the attribute is removed, any tag column is left empty,
+            // then remove that column as well by checking its corresponding checkbox
+            // $('.inputs_container').each(function(index, item){
+            //     let hiddenChildrenCount = 0; 
+            //     $(item).children().each(function(index, child){
+            //         if ($(child).is(':hidden')){
+            //             // console.log('Hidden Child found: ', $(child))
+            //             hiddenChildrenCount += 1
+
+            //         }
+            //         // console.log('hiddenChildrenCount: ', hiddenChildrenCount);
+            //         // console.log('$(item): ', $(item)[0].childElementCount);
+            //         if(hiddenChildrenCount == ($(item)[0].childElementCount)){
+            //             // console.log('Element with ALL Children Hidden FOUND...should hide: ', $(item))
+            //             $(item).hide();
+            //         } else {
+            //             $(item).show();
+            //         }
+            //     })
+            //     // console.log('hCC: ', hiddenChildrenCount);
+            //     hiddenChildrenCount = 0;
+            // })
+
+
+
         }
+
+        // Just for DEBUGGING - DELETE
+        $('#user_html_input').val(`<div id="left_panel"> <div id="left_panel_instructions">Welcome to the Custom Tabs Image HTML Generator. Below, please paste some valid HTML you wish to edit. This panel includes a dynamically generated list of all the attributes found in any valid html submitted below. Please alter the attributes using the form below. If you need to append multiple altered copies of the same element, click 'Next' after you have entered the desired values. When you are finished, click 'Copy to Clipboard' to copy the generated HTML.</div> <textarea id="user_html_input" oninput="handleUserInputtedHTML();" val=""></textarea> <!-- TODO: Dynamically generate this as well --> <div id="filter_options"> <div id="tag_filter_options">Tag Filter Options</div> <div id="attr_filter_options">Attribute Filter Options</div> </div> <div id="input_fields"></div> <div id="next_button_container"> <button id="next_button" class="button_styles">Next</button><span id="next_button_count"></span><span id="warning_message"></span> </div> </div>`);
+        $('#user_html_input').trigger('oninput');
 
     </script>
 </body>
