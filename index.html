@@ -284,7 +284,7 @@
         align-items: center;
         color: var(--main-color);
         height: 100vh;
-        overflow: hidden;
+        overflow: scroll;
     }
 
     #right_panel_title {
@@ -496,6 +496,7 @@
             $('#input_fields').html('');
             $('#attr_filter_options').html('');
             $('#tag_filter_options').html('');
+            $('#output_html').text('');
 
             // Clear Tracker Arrays:
             tagAlreadyAdded = [];
