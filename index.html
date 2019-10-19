@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <title>Dynamic HTML Editor</title>
     <meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <meta name="description"
         content="Allows users to input valid HTML, and then edit attributes using an intuatively designed UI.">
     <meta name="author" content="SitePoint">
@@ -44,6 +44,28 @@
         padding: 5px;
         background: rgba(255, 255, 255, 0.5);
         border-radius: 3px;
+    }
+
+
+    input[type=text],
+    textarea {
+        -webkit-transition: all 0.30s ease-in-out;
+        -moz-transition: all 0.30s ease-in-out;
+        -ms-transition: all 0.30s ease-in-out;
+        -o-transition: all 0.30s ease-in-out;
+        outline: none;
+        padding: 3px 0px 3px 3px;
+        margin: 5px 1px 3px 0px;
+        border: 1px solid #DDDDDD;
+        background:bisque;
+    }
+
+    input[type=text]:focus,
+    textarea:focus {
+        box-shadow: 0 0 5px rgb(81, 238, 201);
+        padding: 3px 0px 3px 3px;
+        margin: 5px 1px 3px 0px;
+        border: 1px solid rgba(81, 203, 238, 1);
     }
 
     xmp {
@@ -234,22 +256,40 @@
         font-size: 14px;
         color: var(--secondary-color);
         font-weight: normal;
+        background: silver;
+        padding: 5px;
+        margin: 5px;
+        /* -webkit-box-shadow: 0px 0px 3px 1px rgb(50, 50, 50);
+        -moz-box-shadow: 0px 0px 3px 1px rgb(50, 50, 50);
+        box-shadow: 0px 0px 3px 1px rgb(50, 50, 50); */
+    }
+
+    .group_button {
+        margin-top: 5px;
+        cursor: pointer;
+        padding: 5px;
+        width: 60px;
+        margin-bottom:5px;
     }
 
     .hide_button {
-        display: block;
-        background: transparent;
-        border: none;
-        font-weight: bold;
+        /* Hidden just b/c its not something Kate will use */
+        display: none;
+        /* background: transparent; */
+        /* border: none; */
+        /* font-weight: bold; */
         font-size: 14px;
         padding-left: 0px;
-        width: 26px;
+        /* width: 26px; */
+        width:60px;
+        padding:5px;
+        margin-bottom:5px;
     }
 
     .hide_button:hover {
         color: yellowgreen;
         cursor: pointer;
-        text-align: start;
+        /* text-align: start; */
     }
 
     /* Next Button */
@@ -270,7 +310,15 @@
         padding: 10px 0px 0px 10px;
     }
 
-    #warning_message {
+    #undo_button {
+        width: 100px;
+        height: 40px;
+        align-self: center;
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+
+    .message-blurb {
         color: darkgoldenrod;
         padding: 10px 0px 0px 10px;
     }
@@ -406,7 +454,11 @@
             </div>
             <div id="next_button_container">
                 <button id="next_button" class="button_styles">Next</button><span id="next_button_count"></span><span
-                    id="warning_message"></span>
+                    id="warning_message" class="message-blurb"></span>
+            </div>
+            <div id="undo_button_container">
+                <button id="undo_button" class="button_styles" onclick="revert();">Undo</button><span
+                    id="cannot_undo_warning_message" class="message-blurb"></span>
             </div>
 
         </div>
@@ -431,7 +483,11 @@
 
         let trimmed = "";
 
-        function imageHTMLGenerator(element) {
+        let indented;
+
+
+
+        function handleUserTagAndAttrEdits(element) {
             // console.log('Element:', $(element)[0].id);
             // console.log('Element\'s Grandparent: ', $(element).parent().parent()[0].id);
             // console.log('This is #user_html_input: ', $('#user_html_input').val());
@@ -444,6 +500,7 @@
 
             let frag = document.createElement('span');
             frag.innerHTML = $('#user_html_input').val();
+            indented ? frag.innerHTML = indented : frag.innerHTML = $('#user_html_input').val();
             // console.log('This is the element: ', $(grandpaId, frag));
             // console.log('By tag name ', frag.getElementsByTagName(grandpaId));
             // let elementToEdit = FIND CORRECT ELEMENT TO EDIT USING INDICES IN ID's
@@ -471,7 +528,7 @@
                 if (tagListItemName.toLowerCase() == grandpaId_tag && grandpaId_index == fragTagItemsTally[`${tagListItemName}`]) {
                     // console.log('item tally:', fragTagItemsTally[`${tagListItemName}`]);
                     // console.log(tagListItemName.toLowerCase())
-                    console.log('This is your item:', $(item))
+                    // console.log('This is your item:', $(item))
                     let elementToEdit = $(item);
                     elementToEdit.attr(elId_attr, $(element).val());
 
@@ -480,11 +537,14 @@
             // $(elementToEdit).attr(elId, $(element).val());
 
             // console.log('Edited?:', elementToEdit);
-            var indented = indent.html(frag.innerHTML, { tabString: '\t' });
+            indented = indent.html(frag.innerHTML, { tabString: '\t' });
 
             // console.log('This is indented: ', indented);
             $('#output_html').text(indented);
 
+
+
+            // Trim out all spaces, new lines, tabs from inputted html
             trimmed = (frag.innerHTML).replace(/\n/g, "").replace(/\t/g, "").replace(/\s+/g, " ").replace(/(\r\n|\n|\r)/gm, " ");
 
         }
@@ -651,6 +711,19 @@
                     labelItemElement.setAttribute('text', attrName);
                     labelItemElement.className = "input_item_label";
 
+
+                    // Add Group Button to Label
+                    labelGroupButton = document.createElement('BUTTON');
+                    labelGroupButton.setAttribute('onclick', "groupItem(this);");
+                    labelGroupButton.setAttribute('data-input-sib', attrName + "-" + attrTally[`${attrName}`]);
+                    labelGroupButton.className = "group_button";
+                    // Text Content for Group Button
+                    groupButtonTextNode = document.createTextNode('Group');
+                    labelGroupButton.appendChild(groupButtonTextNode);
+                    // Append Group button to Label
+                    labelItemElement.appendChild(labelGroupButton);
+
+
                     // Add Edit Button to Label
                     labelEditButton = document.createElement('BUTTON');
                     labelEditButton.setAttribute('onclick', "hideItem(this);");
@@ -663,6 +736,10 @@
                     // Append button to Label
                     labelItemElement.appendChild(labelEditButton);
 
+
+
+
+
                     // Add Text Content to Label
                     labelTextNode = document.createTextNode(attrName);
                     labelItemElement.appendChild(labelTextNode);
@@ -672,7 +749,7 @@
                     // Input type = 'text';
                     inputsItemElement.type = 'text';
                     inputsItemElement.setAttribute('id', attrName + "-" + attrTally[`${attrName}`]);
-                    inputsItemElement.setAttribute('oninput', 'imageHTMLGenerator(this);')
+                    inputsItemElement.setAttribute('oninput', 'handleUserTagAndAttrEdits(this); handleGroupedInputValues(this);')
                     labelItemElement.appendChild(inputsItemElement);
                     inputsContainerElement.appendChild(labelItemElement);
 
@@ -707,8 +784,9 @@
         }
 
         let combinedImages = '';
-
+        let outputHistoryArray = [];
         let nextButtonCount = 0;
+
         $('#next_button').on('click', function () {
             // Append new html to master string - combinedImages
             if (trimmed !== "") {
@@ -719,27 +797,22 @@
 
                 $("#final_output_html").val(combinedImages);
                 $("#clipboard_preview").html(combinedImages);
-            }
 
-            if (trimmed !== '') {
+                // Add final current user's html to history
+                outputHistoryArray.push(combinedImages)
+                // console.log('history: ', outputHistoryArray);
+                // console.log('combinedImages: ', combinedImages);
                 // Increment Next Button Count
                 nextButtonCount++
-            }
-
-
-
-
-
-            let message = nextButtonCount + ' Copies Appended';
-
-            if (trimmed === '') {
+            } else {
                 $('#warning_message').text(' Warning: EMPTY element found, nothing appended');
                 setTimeout(() => {
                     $('#warning_message').text('');
                 }, 3000);
-
             }
 
+            // Update '# Copies Appended' display
+            let message = nextButtonCount + ' Copies Appended';
             $('#next_button_count').text(message);
 
             // Clear Previous values
@@ -751,11 +824,49 @@
                 $('#clipboard_preview_title').html('Clipboard Preview');
             }
 
-
         })
 
+        function revert() {
+            // remove last element in array
+            if (outputHistoryArray.length > 1) {
+                outputHistoryArray.pop();
+                // set new last element as current combinedImages
+                combinedImages = outputHistoryArray[outputHistoryArray.length - 1]
+                // console.log('combinedImages: ', combinedImages)
+                // Mimick next button onClick functionality
+                $("#final_output_html").val(combinedImages);
+                $("#clipboard_preview").html(combinedImages);
+
+                // Clear Previous values
+                $('#input_fields input').each(function (index, item) {
+                    $(item).val('')
+                })
+
+                if ($('#clipboard_preview_title').is(':visible')) {
+                    $('#clipboard_preview_title').html('Clipboard Preview');
+                }
+
+                // console.log('history: ', outputHistoryArray)
+                // Increment Next Button Count
+                nextButtonCount--
+
+                // Update '# Copies Appended' display
+                let message = nextButtonCount + ' Copies Appended';
+                $('#next_button_count').text(message);
+            } else {
+                let message = 'Not enough output history to undo!';
+                $('#cannot_undo_warning_message').text(message);
+                setTimeout(() => {
+                    $('#cannot_undo_warning_message').text('');
+                }, 2000);
+                console.log('Not enough output history to undo!')
+            }
+
+
+        }
+
         function hideItem(element) {
-            // console.log('Inside hideItem: ', element);
+            this.event.stopPropagation();
             if ($(element).next().is(':hidden')) {
                 $(element).next().show();
                 $(element).text('hide');
@@ -764,6 +875,43 @@
                 $(element).next().hide();
                 $(element).text('edit');
                 $(element).parent().css("padding", "0px 0px");
+            }
+        }
+
+        function groupItem(element) {
+            if ($('input#' + $(element).attr('data-input-sib')).hasClass('groupItem1')) {
+                // Being here indicates that this Group button was already pressed
+                $(element).css('background', 'white');
+                // Remove groupItem1 class from respective input sibling
+                $('input#' + $(element).attr('data-input-sib')).removeClass('groupItem1');
+            } else {
+                // element.event.stopPropagation();
+                $(element).css('background', 'pink');
+                // Add groupItem1 class to respective input sibling
+                $('input#' + $(element).attr('data-input-sib')).addClass('groupItem1');
+
+                // let currentInputSiblingVal = $('input#' + $(element).attr('data-input-sib')).val();
+
+                // $('.groupItem1').each(function (index, item) {
+                //     $(item).on('input', function () {
+                //         $('.groupItem1').each(function (index, item) {
+                //             $(item).val(this.val());
+                //         })
+                //     })
+                //     // $('input#' + $(item).attr('data-input-sib')).val(currentInputSiblingVal)
+                // })
+            }
+
+        }
+
+        function handleGroupedInputValues(element) {
+            if ($(element).hasClass('groupItem1')) {
+                // console.log($(element).val())
+                let groupValue = $(element).val()
+                $('.groupItem1').each(function (index, item) {
+                    $(item).val(groupValue)
+                    handleUserTagAndAttrEdits(item);
+                })
             }
         }
 
@@ -819,10 +967,33 @@
 
         }
 
-        // Inject Placeholder
-        $('#user_html_input').val(`<img src="edit/this/src" alt="edit/this/alt"></img>`);
+        // Inject Example HTML
+        $('#user_html_input').val(`<div class="col-md-2 col-sm-3 col-xsm-6" style="text-align: center; padding: 20px;"><a class="woocommerce-main-image zoom" href="/wp-content/uploads/2017/11/Amazon-Review-Customer-Photo-Tab-.jpg" data-title="Skooter in Blind Dog Halo" data-lightbox-gallery="rearliftgal"><img class="attachment-shop-thumb-main size-shop-thumb-main wp-post-image" style="border: 2px solid #cfcfcf;" title="Skooter in Blind Dog Halo" src="/wp-content/uploads/2017/11/Amazon-Review-Customer-Photo-Tab--150x150.jpg" alt="Skooter in Blind Dog Halo" width="150" height="150"></a></div>`);
         $('#user_html_input').trigger('oninput');
-        $()
+        // Hide the following afo_labels by default
+        $('.afo_label').each(function (index, item) {
+            let optionsToHide = {
+                'div': 1,
+                'class': 1,
+                'style': 1,
+                'data-lightbox-gallery': 1,
+                'width': 1,
+                'height': 1
+            }
+            if (optionsToHide[$(item).text()]) {
+                $(item).click();
+            }
+        })
+        $('.group_button').each(function(index, item){
+            let groupTheseInputs = {
+                'title-0':1,
+                'alt-0':1,
+                'data-title-0':1
+            }
+            if(groupTheseInputs[$(item).attr('data-input-sib')]){
+                    $(item).click();
+            }
+        })
 
     </script>
 </body>
