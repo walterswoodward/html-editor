@@ -57,7 +57,7 @@
         padding: 3px 0px 3px 3px;
         margin: 5px 1px 3px 0px;
         border: 1px solid #DDDDDD;
-        background:bisque;
+        background: bisque;
     }
 
     input[type=text]:focus,
@@ -259,6 +259,7 @@
         background: silver;
         padding: 5px;
         margin: 5px;
+        border-radius: 5px;
         /* -webkit-box-shadow: 0px 0px 3px 1px rgb(50, 50, 50);
         -moz-box-shadow: 0px 0px 3px 1px rgb(50, 50, 50);
         box-shadow: 0px 0px 3px 1px rgb(50, 50, 50); */
@@ -269,7 +270,13 @@
         cursor: pointer;
         padding: 5px;
         width: 60px;
-        margin-bottom:5px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+    }
+
+    .group_button:hover {
+        /* margin-left: 2px; */
+        /* color: rgb(100,100,100); */
     }
 
     .hide_button {
@@ -281,15 +288,18 @@
         font-size: 14px;
         padding-left: 0px;
         /* width: 26px; */
-        width:60px;
-        padding:5px;
-        margin-bottom:5px;
+        width: 60px;
+        padding: 5px;
+        margin-bottom: 5px;
+        background: darkseagreen;
+        border-radius: 5px;
     }
 
     .hide_button:hover {
-        color: yellowgreen;
+        color: white;
         cursor: pointer;
         /* text-align: start; */
+        /* margin-left: 2px; */
     }
 
     /* Next Button */
@@ -706,7 +716,7 @@
                     // console.log($(item)[0].attributes[key])
                     // console.log('$(item)[0].attributes[key]:', $($(item)[0].attributes[key])[0].name);
 
-                    labelItemElement = document.createElement('LABEL');
+                    labelItemElement = document.createElement('DIV');
                     labelItemElement.setAttribute('id', attrName + "-" + attrTally[`${attrName}`])
                     labelItemElement.setAttribute('text', attrName);
                     labelItemElement.className = "input_item_label";
@@ -730,7 +740,7 @@
                     labelEditButton.className = "hide_button";
 
                     // Text Content for Edit Button
-                    buttonTextNode = document.createTextNode('hide');
+                    buttonTextNode = document.createTextNode('Hide');
                     labelEditButton.appendChild(buttonTextNode);
 
                     // Append button to Label
@@ -764,6 +774,34 @@
             if (!userInputtedTags.length) {
                 $('#output_html').text('No valid HTML found! Please try again!');
             }
+
+            // KATE'S DEFAULTS:
+
+            // Hide the following afo_labels by default - for Kate
+            $('.afo_label').each(function (index, item) {
+                let optionsToHide = {
+                    'div': 1,
+                    'class': 1,
+                    'style': 1,
+                    'data-lightbox-gallery': 1,
+                    'width': 1,
+                    'height': 1
+                }
+                if (optionsToHide[$(item).text()]) {
+                    $(item).click();
+                }
+            })
+            // Group these Inputs by default - for Kate
+            $('.group_button').each(function (index, item) {
+                let groupTheseInputs = {
+                    'title-0': 1,
+                    'alt-0': 1,
+                    'data-title-0': 1
+                }
+                if (groupTheseInputs[$(item).attr('data-input-sib')]) {
+                    $(item).click();
+                }
+            })
         }
 
         function copyToClipBoard() {
@@ -795,7 +833,9 @@
                 console.log('%c ' + combinedImages, 'background: #222; color: ' + getRandomColor());
                 // alert('Image saved! Preview output html in console')
 
+                // This is what is actually copied when you click on 'Copy to Clipboard'
                 $("#final_output_html").val(combinedImages);
+                // This is what is displayed in the right panel
                 $("#clipboard_preview").html(combinedImages);
 
                 // Add final current user's html to history
@@ -828,10 +868,16 @@
 
         function revert() {
             // remove last element in array
-            if (outputHistoryArray.length > 1) {
+            if (outputHistoryArray.length > 0) {
                 outputHistoryArray.pop();
+
                 // set new last element as current combinedImages
-                combinedImages = outputHistoryArray[outputHistoryArray.length - 1]
+                if (outputHistoryArray.length){
+                    combinedImages = outputHistoryArray[outputHistoryArray.length - 1]
+                } else {
+                    combinedImages = ''
+                }
+                
                 // console.log('combinedImages: ', combinedImages)
                 // Mimick next button onClick functionality
                 $("#final_output_html").val(combinedImages);
@@ -846,7 +892,8 @@
                     $('#clipboard_preview_title').html('Clipboard Preview');
                 }
 
-                // console.log('history: ', outputHistoryArray)
+
+                console.log('history: ', outputHistoryArray)
                 // Increment Next Button Count
                 nextButtonCount--
 
@@ -869,49 +916,54 @@
             this.event.stopPropagation();
             if ($(element).next().is(':hidden')) {
                 $(element).next().show();
-                $(element).text('hide');
-                $(element).parent().css("padding", "10px 0px");
+                $(element).text('Hide');
+                $(element).parent().css("padding", "5px");
             } else {
                 $(element).next().hide();
-                $(element).text('edit');
+                $(element).text('Edit');
                 $(element).parent().css("padding", "0px 0px");
             }
         }
 
         function groupItem(element) {
             if ($('input#' + $(element).attr('data-input-sib')).hasClass('groupItem1')) {
+                // element.event.stopPropagation();
+                $(element).css('background', 'rgba(155, 144, 245, 0.55)');
+                // Remove groupItem1 class
+                $('input#' + $(element).attr('data-input-sib')).removeClass('groupItem1');
+                // Add groupItem1 class to respective input sibling
+                $('input#' + $(element).attr('data-input-sib')).addClass('groupItem2');
+            } else if ($('input#' + $(element).attr('data-input-sib')).hasClass('groupItem2')) {
+                // element.event.stopPropagation();
+                $(element).css('background', '#ff7b00b0');
+                // Remove groupItem2 class
+                $('input#' + $(element).attr('data-input-sib')).removeClass('groupItem2');
+                // Add groupItem2 class to respective input sibling
+                $('input#' + $(element).attr('data-input-sib')).addClass('groupItem3');
+            } else if ($('input#' + $(element).attr('data-input-sib')).hasClass('groupItem3')) {
                 // Being here indicates that this Group button was already pressed
                 $(element).css('background', 'white');
-                // Remove groupItem1 class from respective input sibling
-                $('input#' + $(element).attr('data-input-sib')).removeClass('groupItem1');
+                // Remove groupItem3 class from respective input sibling
+                $('input#' + $(element).attr('data-input-sib')).removeClass('groupItem3');
             } else {
                 // element.event.stopPropagation();
                 $(element).css('background', 'pink');
                 // Add groupItem1 class to respective input sibling
                 $('input#' + $(element).attr('data-input-sib')).addClass('groupItem1');
-
-                // let currentInputSiblingVal = $('input#' + $(element).attr('data-input-sib')).val();
-
-                // $('.groupItem1').each(function (index, item) {
-                //     $(item).on('input', function () {
-                //         $('.groupItem1').each(function (index, item) {
-                //             $(item).val(this.val());
-                //         })
-                //     })
-                //     // $('input#' + $(item).attr('data-input-sib')).val(currentInputSiblingVal)
-                // })
             }
 
         }
 
         function handleGroupedInputValues(element) {
-            if ($(element).hasClass('groupItem1')) {
-                // console.log($(element).val())
-                let groupValue = $(element).val()
-                $('.groupItem1').each(function (index, item) {
-                    $(item).val(groupValue)
-                    handleUserTagAndAttrEdits(item);
-                })
+            for (let i = 1; i < 4; i++) {
+                if ($(element).hasClass('groupItem' + i)) {
+                    // console.log($(element).val())
+                    let groupValue = $(element).val()
+                    $('.groupItem' + i).each(function (index, item) {
+                        $(item).val(groupValue)
+                        handleUserTagAndAttrEdits(item);
+                    })
+                }
             }
         }
 
@@ -932,7 +984,7 @@
             let attrFieldsNameToToggle = $(element).parent()[0].textContent;
             // console.log(attrFieldsNameToToggle);
 
-            $('.inputs_container label').each(function (index, item) {
+            $('.inputs_container div').each(function (index, item) {
                 // console.log(item)
                 let itemId = $(item).attr('id')
                 if (itemId.indexOf(attrFieldsNameToToggle) !== -1) {
@@ -970,30 +1022,31 @@
         // Inject Example HTML
         $('#user_html_input').val(`<div class="col-md-2 col-sm-3 col-xsm-6" style="text-align: center; padding: 20px;"><a class="woocommerce-main-image zoom" href="/wp-content/uploads/2017/11/Amazon-Review-Customer-Photo-Tab-.jpg" data-title="Skooter in Blind Dog Halo" data-lightbox-gallery="rearliftgal"><img class="attachment-shop-thumb-main size-shop-thumb-main wp-post-image" style="border: 2px solid #cfcfcf;" title="Skooter in Blind Dog Halo" src="/wp-content/uploads/2017/11/Amazon-Review-Customer-Photo-Tab--150x150.jpg" alt="Skooter in Blind Dog Halo" width="150" height="150"></a></div>`);
         $('#user_html_input').trigger('oninput');
-        // Hide the following afo_labels by default
-        $('.afo_label').each(function (index, item) {
-            let optionsToHide = {
-                'div': 1,
-                'class': 1,
-                'style': 1,
-                'data-lightbox-gallery': 1,
-                'width': 1,
-                'height': 1
-            }
-            if (optionsToHide[$(item).text()]) {
-                $(item).click();
-            }
-        })
-        $('.group_button').each(function(index, item){
-            let groupTheseInputs = {
-                'title-0':1,
-                'alt-0':1,
-                'data-title-0':1
-            }
-            if(groupTheseInputs[$(item).attr('data-input-sib')]){
-                    $(item).click();
-            }
-        })
+        // // Hide the following afo_labels by default - for Kate
+        // $('.afo_label').each(function (index, item) {
+        //     let optionsToHide = {
+        //         'div': 1,
+        //         'class': 1,
+        //         'style': 1,
+        //         'data-lightbox-gallery': 1,
+        //         'width': 1,
+        //         'height': 1
+        //     }
+        //     if (optionsToHide[$(item).text()]) {
+        //         $(item).click();
+        //     }
+        // })
+        // // Group these Inputs by default - for Kate
+        // $('.group_button').each(function (index, item) {
+        //     let groupTheseInputs = {
+        //         'title-0': 1,
+        //         'alt-0': 1,
+        //         'data-title-0': 1
+        //     }
+        //     if (groupTheseInputs[$(item).attr('data-input-sib')]) {
+        //         $(item).click();
+        //     }
+        // })
 
     </script>
 </body>
